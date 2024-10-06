@@ -13,6 +13,7 @@ import Navbar from "./components/Navbar";
 import UserLogin from "./pages/auth/UserLogin";
 import Registration from "./pages/auth/Registration";
 import RestaurantDetail from "./pages/Restaurant/RestaurantDetail";
+import DishDetail from "./pages/Restaurant/DishDetail";
 function App() {
   const { access_token } = useSelector(state => state.auth);
   console.log("Access Token", access_token);
@@ -30,7 +31,7 @@ function App() {
           <Route path="api/user/reset/:id/:token" element={<ResetPassword />} />
           <Route path="restaurant-register" element={ <Register  />}/> 
           <Route path='/detail/:id' element={<RestaurantDetail/>} />
-
+          <Route path="/dishdetail/:slug" element={<DishDetail/>}/>
           <Route path="/dashboard" element={access_token ? <Dashboard /> : <Navigate to="/login" />} />
           <Route path="*" element={<h1>Error 404 Page not found !!</h1>} />
         </Routes>

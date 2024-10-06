@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,Link } from 'react-router-dom';
 import axios from 'axios';
 
 const RestaurantDetail = () => {
@@ -27,7 +27,7 @@ const RestaurantDetail = () => {
           <div key={index} className="col-lg-4 col-md-12 mb-4">
             <div className="card">
               <div className="bg-image hover-zoom ripple" data-mdb-ripple-color="light">
-                <img src={dish.image} className="w-100" />
+                <Link to={`/dishdetail/${dish.slug}`}><img src={dish.image} className="w-100" /></Link>
               </div>
               <div className="card-body">
                 <h5 className="card-title mb-3">{dish.title}</h5>
