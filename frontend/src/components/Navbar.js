@@ -193,10 +193,11 @@ const Navbar = () => {
   </>
 )}
 
-            {/* <Link className="btn btn-danger" to="/cart/">
+            <Link className="btn btn-danger" to="/cart/">
+              {/* <i className="fas fa-shopping-cart"></i>{" "} */}
               <i className="fas fa-shopping-cart"></i>{" "}
               <span id="cart-total-items">0</span>
-            </Link> */}
+            </Link>
           </div>
         </div>
       </nav>

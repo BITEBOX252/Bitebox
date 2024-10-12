@@ -14,6 +14,8 @@ import UserLogin from "./pages/auth/UserLogin";
 import Registration from "./pages/auth/Registration";
 import RestaurantDetail from "./pages/Restaurant/RestaurantDetail";
 import DishDetail from "./pages/Restaurant/DishDetail";
+import Cart from "./pages/Restaurant/Cart";
+
 function App() {
   const { access_token } = useSelector(state => state.auth);
   console.log("Access Token", access_token);
@@ -33,7 +35,9 @@ function App() {
           <Route path='/detail/:id' element={<RestaurantDetail/>} />
           <Route path="/dishdetail/:slug" element={<DishDetail/>}/>
           <Route path="/dashboard" element={access_token ? <Dashboard /> : <Navigate to="/login" />} />
+          <Route path='/cart' element={<Cart/>} />
           <Route path="*" element={<h1>Error 404 Page not found !!</h1>} />
+
         </Routes>
         <Footer/>
       </BrowserRouter>

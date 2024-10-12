@@ -86,14 +86,14 @@ class CartAPIView(generics.ListCreateAPIView):
         country=payload['country']
         if country == "undefined":
             country ="Pakistan"
-        portion_size=payload['portion_size']
+        portion_size=payload['portionSize']
         print("size=============="+portion_size)
         if portion_size!="No size":
             portion_size_price=portion_size_obj.get_price_by_portion(portion_size)
             print("size==============",portion_size_price)
             price= Decimal(price)+portion_size_price
             print(type(portion_size_price))
-        spice_level=payload['spice_level']
+        spice_level=payload['spiceLevel']
         cart_id=payload['cart_id']
         
         dish=Dish.objects.get(id=dish_id)

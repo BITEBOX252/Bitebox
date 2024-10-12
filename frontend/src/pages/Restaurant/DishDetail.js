@@ -1,7 +1,17 @@
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import React,{useState,useEffect} from 'react'
+import CartID from '../plugins/CartID'
+import { getToken } from '../../services/LocalStorageService'
+import { useGetLoggedUserQuery } from '../../services/userAuthApi'
+import { setUserToken } from '../../features/authSlice'
+import { setUserInfo } from '../../features/userSlice'
+import { useDispatch } from 'react-redux';
+
+
 const DishDetail = () => {
+    const dispatch = useDispatch();
+
     const [product,setProduct]= useState({})
     const [specification,setSpecification]= useState([])
     const [gallery,setGallery]= useState([])
@@ -13,8 +23,26 @@ const DishDetail = () => {
     const [qtyValue,setQtyValue]= useState(1)
     const [priceByPortionSize,setPriceByPortionSize]= useState(0)
 
+
+    const CartId= CartID()
+    let { access_token } = getToken();
+    const {data,isSuccess} = useGetLoggedUserQuery(access_token)
+
+
     const params=useParams()
+
+    useEffect(()=>{
+        dispatch(setUserToken({ access_token: access_token }));
+        if (data && isSuccess) {
+        console.log("Data is this",data);
+        
+        dispatch(setUserInfo({email:data.email,name:data.name}))
+        
+    }
+    console.log("Access Token is this",data);
+    })
     useEffect(()=>  {
+        
         axios.get(`http://127.0.0.1:8000/api/store/dish/${params.slug}`).then((res)=>{
       
         console.log(res.data);
@@ -24,7 +52,7 @@ const DishDetail = () => {
         setGallery(res.data?.gallery)
         setSpiceLevel(res.data?.spice_level)
         setPortionSize(res.data?.portion_size)
-    
+            
         })
     },[])
     console.log(spiceLevel);
@@ -68,8 +96,42 @@ const DishDetail = () => {
         
     }
 
+    const qtyhandler=(e)=>{
+        setQtyValue(e.target.value)
+    }
 
 
+    const carthandler= async ()=>{
+        // console.log(product.id);
+        // console.log(product.price);
+        // console.log(product.shipping_amount);
+        // console.log(qtyValue);
+        // console.log(colorValue);
+        // console.log(sizeValue);
+        // console.log(currAddress.country);
+        // console.log(userData.user_id);
+        // console.log(CartId);
+        try {
+        const formdata=new FormData()
+        formdata.append("dish_id",product.id)
+        formdata.append("user_id",data?.id)
+        formdata.append("qty",qtyValue)
+        formdata.append("price",product.price)
+        formdata.append("shipping_amount",product.shipping_amount)
+        // formdata.append("country",currAddress.country)
+        formdata.append("country","undefined")
+        formdata.append("portionSize",portionSizeValue)
+        formdata.append("spiceLevel",spiceLevelValue)
+        formdata.append("cart_id",CartId)
+
+        const response= await axios.post(`http://127.0.0.1:8000/api/store/cart/`,formdata)
+        console.log(response);
+
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
 
   return (
     <div>
@@ -183,8 +245,8 @@ const DishDetail = () => {
                                             id="typeNumber"
                                             className="form-control quantity"
                                             min={1}
-                                            // value={qtyValue}
-                                            // onChange={qtyhandler}
+                                            value={qtyValue}
+                                            onChange={qtyhandler}
                                         />
                                     </div>
                                 </div>
@@ -231,9 +293,9 @@ const DishDetail = () => {
                                 
 
                             </div>
-                            {/* <button type="button" className="btn btn-primary btn-rounded me-2"  onClick={carthandler}  > */}
+                            <button type="button" className="btn btn-primary btn-rounded me-2"  onClick={carthandler}  >
                                 <i className="fas fa-cart-plus me-2" /> Add to cart
-                            {/* </button> */}
+                            </button>
                             <button href="#!" type="button" className="btn btn-danger btn-floating" data-mdb-toggle="tooltip" title="Add to wishlist">
                                 <i className="fas fa-heart" />
                             </button>
