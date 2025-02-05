@@ -19,7 +19,7 @@ function Sidebar() {
         </li>
         <li className="mb-3">
             <Link to="/restaurant/dishes/" className={isActiveLink(location.pathname, '/restaurant/dishes/')?"nav-link text-white active":"nav-link text-white"}>
-                <i className="bi bi-grid" /> Products{" "}
+                <i className="bi bi-grid" /> Dishes{" "}
             </Link>
         </li>
         <li className="mb-3">

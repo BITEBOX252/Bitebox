@@ -487,45 +487,52 @@ function AddDish() {
                 <div className="col-md-12">
                   <div className="card mb-3">
                     <div className="card-body">
+                      {spiceLevels.map((s,index)=>(
+
                       <div className="row text-dark">
-                        <div className="col-lg-4 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Name
+                        <div className="col-lg-5">
+                          <label htmlFor="" className="mb-1">
+                            Spice Level
                           </label>
                           <input
                             type="text"
                             className="form-control"
                             name=""
-                            placeholder="Green"
+                            placeholder="BBQ"
                             id=""
+                            onChange={(e)=>handleInputChange(index,'level',e.target.value,setSpiceLevels)}
+                            value={s.level || ''}
                           />
                         </div>
-                        <div className="col-lg-4 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Code
+                        <div className="col-lg-5">
+                          <label htmlFor="" className="mb-1">
+                            Price
                           </label>
                           <input
                             type="text"
-                            placeholder="#f4f7f6"
+                            placeholder="$2"
                             className="form-control"
                             name=""
                             id=""
+                            onChange={(e)=>handleInputChange(index,'price',e.target.value,setSpiceLevels)}
+                            value={s.price || ''}
                           />
                         </div>
-                        <div className="col-lg-4 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Image
-                          </label>
-                          <input
-                            type="file"
-                            className="form-control"
-                            name=""
-                            id=""
-                          />
+                        <div  className="col-lg-2">
+                        <button onClick={()=>handleRemove(index,setSpiceLevels)}  className="btn btn-danger mt-4">
+                              Remove
+                            </button>
                         </div>
                       </div>
-                      <button className="btn btn-primary mt-5">
-                        <i className="fas fa-plus" /> Add Color
+                      ))}
+                      {spiceLevels < 1 && 
+                       <h4>
+                        No level added
+                       </h4>
+
+                      }
+                      <button onClick={()=>handleAddMore(setSpiceLevels)}  className="btn btn-primary mt-5">
+                        <i className="fas fa-plus" /> Add Level
                       </button>
                     </div>
                   </div>
@@ -605,13 +612,13 @@ function AddDish() {
                     aria-controls="pills-color"
                     aria-selected="false"
                   >
-                    Color
+                    Spice Level
                   </button>
                 </li>
               </ul>
               <div className="d-flex justify-content-center mb-5">
                 <button className="btn btn-success w-50">
-                  Create Product <i className="fa fa-check-circle" />{" "}
+                  Add Dish <i className="fa fa-check-circle" />{" "}
                 </button>
               </div>
             </div>
