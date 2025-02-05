@@ -280,24 +280,33 @@ function AddDish() {
                         <div className="col-lg-6 mb-2">
                             {item.image && (
 
-                            <img src={item.image.preview} style={{height:"100px",width:"100%",objectFit:"cover",borderRadius:"10px"}}/>
+                            <img src={item.image.preview} style={{height:"200px",width:"100%",objectFit:"cover",borderRadius:"10px"}}/>
                             )}
                             {!item.image && (
 
-                            <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" style={{height:"100px",width:"100%",objectFit:"cover",borderRadius:"10px"}}/>
+                            <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" style={{height:"200px",width:"100%",objectFit:"cover",borderRadius:"10px"}}/>
                             )}
                         </div>
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">Dish Image</label>
+                        <div className="col-lg-3">
+                          <label htmlFor="" className="mb-1">Dish Image</label>
                           <input
                             type="file"
                             className="form-control"
                             onChange={(e)=>handleImageChange(index,e,setGallery)}
                           />
                         </div>
+                        <div className="col-lg-3">
+                            <button onClick={()=>handleRemove(index,setGallery)} className="btn btn-danger mt-4">
+                              Remove
+                            </button>
+                        </div>
                       </div>
                             ))}
-                      <button className="btn btn-primary mt-5">
+
+                            {gallery < 1 &&
+                              <h4>No Images Selected</h4>
+                            }
+                      <button onClick={()=>handleAddMore(setGallery)} className="btn btn-primary mt-5">
                         <i className="fas fa-plus" /> Add Image
                       </button>
                     </div>
@@ -316,79 +325,43 @@ function AddDish() {
                 <div className="col-md-12">
                   <div className="card mb-3">
                     <div className="card-body">
+                      {specifications.map((s,index)=>(
+
                       <div className="row text-dark">
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
+                        <div className="col-lg-5">
+                          <label htmlFor="" className="mb-1">
                             Title
                           </label>
                           <input
+                          value={s.title || ''}
                             type="text"
                             className="form-control"
-                            name=""
-                            id=""
+                            onChange={(e)=>handleInputChange(index,'title',e.target.value,setSpecifications)}
                           />
                         </div>
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
+                        <div className="col-lg-5">
+                          <label  htmlFor="" className="mb-1">
                             Content
                           </label>
                           <input
                             type="text"
                             className="form-control"
-                            name=""
-                            id=""
+                            onChange={(e)=>handleInputChange(index,'content',e.target.value,setSpecifications)}
+                          value={s.content || ''}
+                            
                           />
+                        </div>
+                        <div className="col-lg-2">
+                        <button onClick={()=>handleRemove(index,setSpecifications)}  className="btn btn-danger mt-4">
+                              Remove
+                            </button>
                         </div>
                       </div>
-                      <div className="row text-dark">
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Title
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name=""
-                            id=""
-                          />
-                        </div>
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Content
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name=""
-                            id=""
-                          />
-                        </div>
-                      </div>
-                      <div className="row text-dark">
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Title
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name=""
-                            id=""
-                          />
-                        </div>
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Content
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name=""
-                            id=""
-                          />
-                        </div>
-                      </div>
-                      <button className="btn btn-primary mt-5">
+                      ))}
+                      {specifications < 1 && 
+                      <h4>No specifications added</h4>
+                      }
+                      <button onClick={()=>handleAddMore(setSpecifications)} className="btn btn-primary mt-5">
                         <i className="fas fa-plus" /> Add Specifications
                       </button>
                     </div>
@@ -402,7 +375,7 @@ function AddDish() {
               role="tabpanel"
               aria-labelledby="pills-contact-tab"
             >
-              <div className="row gutters-sm shadow p-4 rounded">
+              {/* <div className="row gutters-sm shadow p-4 rounded">
                 <h4 className="mb-4">Size</h4>
                 <div className="col-md-12">
                   <div className="card mb-3">
@@ -437,7 +410,7 @@ function AddDish() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             <div
               className="tab-pane fade"
@@ -450,9 +423,11 @@ function AddDish() {
                 <div className="col-md-12">
                   <div className="card mb-3">
                     <div className="card-body">
+                      {sizes.map((s,index)=>(
+
                       <div className="row text-dark">
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
+                        <div className="col-lg-5">
+                          <label htmlFor="" className="mb-1">
                             Size
                           </label>
                           <input
@@ -461,10 +436,12 @@ function AddDish() {
                             name=""
                             placeholder="XXL"
                             id=""
+                            onChange={(e)=>handleInputChange(index,'title',e.target.value,setSizes)}
+                            value={s.title || ''}
                           />
                         </div>
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
+                        <div className="col-lg-5">
+                          <label htmlFor="" className="mb-1">
                             Price
                           </label>
                           <input
@@ -473,62 +450,25 @@ function AddDish() {
                             className="form-control"
                             name=""
                             id=""
+                            onChange={(e)=>handleInputChange(index,'price',e.target.value,setSizes)}
+                            value={s.price || ''}
                           />
                         </div>
+                        <div  className="col-lg-2">
+                        <button onClick={()=>handleRemove(index,setSizes)}  className="btn btn-danger mt-4">
+                              Remove
+                            </button>
+                        </div>
+
                       </div>
-                      <div className="row text-dark">
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Size
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name=""
-                            placeholder="SM"
-                            id=""
-                          />
-                        </div>
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Price
-                          </label>
-                          <input
-                            type="number"
-                            placeholder="$10"
-                            className="form-control"
-                            name=""
-                            id=""
-                          />
-                        </div>
-                      </div>
-                      <div className="row text-dark">
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Size
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name=""
-                            placeholder="LS"
-                            id=""
-                          />
-                        </div>
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Price
-                          </label>
-                          <input
-                            type="number"
-                            placeholder="$40"
-                            className="form-control"
-                            name=""
-                            id=""
-                          />
-                        </div>
-                      </div>
-                      <button className="btn btn-primary mt-5">
+                      ))}
+                      {sizes < 1 && 
+                       <h4>
+                        No sizes selected
+                       </h4>
+
+                      }
+                      <button onClick={()=>handleAddMore(setSizes)} className="btn btn-primary mt-5">
                         <i className="fas fa-plus" /> Add Size
                       </button>
                     </div>
