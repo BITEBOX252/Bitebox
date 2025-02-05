@@ -1,11 +1,11 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import LoginReg from "./pages/auth/LoginReg";
+// import LoginReg from "./pages/auth/LoginReg";
 import ResetPassword from "./pages/auth/ResetPassword";
 import SendPasswordResetEmail from "./pages/auth/SendPasswordResetEmail";
 import Contact from "./pages/Contact";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
-import Layout from "./pages/Layout";
+// import Layout from "./pages/Layout";
 import { useSelector } from "react-redux";
 import Register from "./pages/Restaurant/Register";
 import Footer from "./components/Footer";
@@ -15,6 +15,11 @@ import Registration from "./pages/auth/Registration";
 import RestaurantDetail from "./pages/Restaurant/RestaurantDetail";
 import DishDetail from "./pages/Restaurant/DishDetail";
 import Cart from "./pages/Restaurant/Cart";
+import RestaurantDashboard from "./pages/Restaurant/RestaurantDashboard";
+import Dish from "./pages/Restaurant/Dish";
+import Orders from "./pages/Restaurant/Orders";
+import AddDish from "./pages/Restaurant/AddDish";
+
 
 function App() {
   const { access_token } = useSelector(state => state.auth);
@@ -37,6 +42,13 @@ function App() {
           <Route path="/dashboard" element={access_token ? <Dashboard /> : <Navigate to="/login" />} />
           <Route path='/cart' element={<Cart/>} />
           <Route path="*" element={<h1>Error 404 Page not found !!</h1>} />
+
+
+          {/* Vendor Routes */}
+          <Route path="/restaurant/dashboard/" element={<RestaurantDashboard/>} />
+          <Route path="/restaurant/dishes/" element={<Dish/>} />
+          <Route path="/restaurant/orders/" element={<Orders/>} />
+          <Route path="/restaurant/add-dish/" element={<AddDish/>} />
 
         </Routes>
         <Footer/>

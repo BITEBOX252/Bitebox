@@ -38,6 +38,7 @@ class Dish(models.Model):  # Renamed from Product to Dish
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     old_price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
+    tags = models.CharField(max_length=1000, null=True, blank=True)
     shipping_amount = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     stock_qty = models.PositiveIntegerField(default=1)
     in_stock = models.BooleanField(default=True)
@@ -73,6 +74,9 @@ class Dish(models.Model):  # Renamed from Product to Dish
 
     def portion_size(self):
         return PortionSize.objects.filter(dish=self)
+    
+    def orders(self):
+        return CartOrderItem.objects.filter(dish=self).count()
 
     def save(self,*args, **kwargs):
         if self.slug == "" or self.slug == None:
@@ -309,3 +313,22 @@ class Tax(models.Model):
     
     def __str__(self):
         return self.country
+
+
+
+class Tag(models.Model):
+    # Tag title
+    title = models.CharField(max_length=30)
+    # Category associated with the tag
+    category = models.ForeignKey(Category, default="", verbose_name="Category", on_delete=models.PROTECT)
+    # Is the tag active?
+    active = models.BooleanField(default=True)
+    # Unique slug for SEO-friendly URLs
+    slug = models.SlugField("Tag slug", max_length=30, null=False, blank=False, unique=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = "Tags"
+        ordering = ('title',)

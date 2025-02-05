@@ -40,7 +40,7 @@ class DishSerializer(serializers.ModelSerializer):
     #For telling react that these are the inline in the django,these are the same names which are in the model methods of product
     class Meta:
         model=Dish
-        fields=['id','title','image','description','category','price','old_price','shipping_amount','stock_qty','in_stock','status','featured','views','rating','restaurant','gallery','specification','spice_level','portion_size','did','slug','date','dish_rating','rating_count']
+        fields=['id','title','image','description','category','price','old_price','orders','shipping_amount','stock_qty','in_stock','status','featured','views','rating','restaurant','gallery','specification','spice_level','portion_size','did','slug','date','dish_rating','rating_count']
     def __init__(self,*args, **kwargs):
         super(DishSerializer,self).__init__(*args, **kwargs)
         request=self.context.get("request")
@@ -173,5 +173,22 @@ class NotificationSerializer(serializers.ModelSerializer):
             self.Meta.depth=3
 
 
+class SummarySerializer(serializers.Serializer):
+    dishes=serializers.IntegerField()
+    orders=serializers.IntegerField()
+    revenue=serializers.DecimalField(max_digits=12,decimal_places=2)
+
+    
+class CouponSummarySerializer(serializers.Serializer):
+    total_coupons=serializers.IntegerField()
+    active=serializers.IntegerField()
+
+
+class NotificationSummarySerializer(serializers.Serializer):
+    unread_notifications=serializers.IntegerField()
+    read_notifications=serializers.IntegerField()
+    all_notifications=serializers.IntegerField()
+
+    
 
     

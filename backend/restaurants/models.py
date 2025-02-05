@@ -1,5 +1,7 @@
 from django.db import models
 from account.models import User
+from django.utils.text import slugify
+
 class Restaurant(models.Model):
     # Basic information
     user = models.OneToOneField(User, on_delete=models.SET_NULL,null=True,default=1) 
@@ -9,7 +11,7 @@ class Restaurant(models.Model):
     email = models.EmailField(blank=True)
     website = models.URLField(blank=True,null=True, )
     image = models.ImageField(upload_to='restaurants/', blank=True)
-
+    slug=models.SlugField(max_length=500)
     # Location tracking
     latitude = models.DecimalField(max_digits=9, decimal_places=6,blank=True,null=True,)
     longitude = models.DecimalField(max_digits=9, decimal_places=6,blank=True,null=True,)
@@ -36,6 +38,10 @@ class Restaurant(models.Model):
     class Meta:
         verbose_name = "Restaurant"
         verbose_name_plural = "Restaurants"
+
+    def save(self,*args, **kwargs):
+        if self.slug==""or self.slug ==None:
+            self.slug=slugify(self.name)
 
 
 # class Vendor(models.Model):

@@ -5,6 +5,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from account.utils import Util
 from django.contrib.auth import authenticate
+from restaurants.models import  Restaurant
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
   # We are writing this becoz we need confirm password field in our Registratin Request
@@ -57,9 +58,17 @@ class UserLocationSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+  restaurant_id = serializers.SerializerMethodField()
   class Meta:
     model = User
-    fields = ['id', 'email', 'name']
+    fields = ['id', 'email', 'name','phone','restaurant_id']
+
+  def get_restaurant_id(self, obj):
+        """Return the restaurant ID if the user has an associated restaurant, else None"""
+        try:
+            return obj.restaurant.id  # Using OneToOne relation (User → Restaurant)
+        except Restaurant.DoesNotExist:
+            return None  # No restaurant linked to this user
 
 class UserChangePasswordSerializer(serializers.Serializer):
   password = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)

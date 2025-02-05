@@ -1,4 +1,4 @@
-import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
+// import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
 import { NavLink,Link } from 'react-router-dom';
 import { getToken,removeToken } from '../services/LocalStorageService';
 import { useDispatch } from 'react-redux';
@@ -10,14 +10,14 @@ const Navbar = () => {
   const navigate = useNavigate()
   const {access_token} = getToken()
   const dispatch=useDispatch()
-  const handleLogout = () => {
-    console.log("Logout Clicked");
-    dispatch(unSetUserToken({access_token: null}))
-    dispatch(setUserInfo({email:"",name:""}))
-    removeToken()
-    navigate('/login')
-  }
-  return <>
+  // const handleLogout = () => {
+  //   console.log("Logout Clicked");
+  //   dispatch(unSetUserToken({access_token: null}))
+  //   dispatch(setUserInfo({email:"",name:""}))
+  //   removeToken()
+  //   navigate('/login')
+  // }
+  return (
     
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -33,14 +33,16 @@ const Navbar = () => {
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation"
-          >
+            style={{color:'red'}}
+          >Account
             <span className="navbar-toggler-icon" />
           </button>
+          
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               {/* <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
-                                    Pages
+                                <a className="nav-link dropdown-toggle" href="#" style={{color:'red'}}  id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                                    Account
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a className="dropdown-item" href="#">About Us</a></li>
@@ -109,7 +111,7 @@ const Navbar = () => {
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
-                    <Link className="dropdown-item" to="/vendor/dashboard/">
+                    <Link className="dropdown-item" to="/restaurant/dashboard/">
                       {" "}
                       <i className="fas fa-user"></i> Dashboard
                     </Link>
@@ -183,7 +185,7 @@ const Navbar = () => {
               </button>
             </div>
             {access_token ? (
-  <button className="btn btn-danger" onClick={handleLogout}>
+  <button className="btn btn-danger" >
     Logout
   </button>
 ) : (
@@ -202,7 +204,7 @@ const Navbar = () => {
         </div>
       </nav>
     </div>
-  </>;
+  );
 };
 
 export default Navbar;
