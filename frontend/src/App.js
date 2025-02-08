@@ -19,6 +19,7 @@ import RestaurantDashboard from "./pages/Restaurant/RestaurantDashboard";
 import Dish from "./pages/Restaurant/Dish";
 import Orders from "./pages/Restaurant/Orders";
 import AddDish from "./pages/Restaurant/AddDish";
+import Logout from "./pages/auth/Logout";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <Route path="contact" element={<Contact />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/login" element={<UserLogin />} />
+          <Route path="/logout" element={<Logout />} />
           <Route path="sendpasswordresetemail" element={<SendPasswordResetEmail />} />
           <Route path="api/user/reset/:id/:token" element={<ResetPassword />} />
           <Route path="restaurant-register" element={ <Register  />}/> 

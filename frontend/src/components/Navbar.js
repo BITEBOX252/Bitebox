@@ -10,13 +10,13 @@ const Navbar = () => {
   const navigate = useNavigate()
   const {access_token} = getToken()
   const dispatch=useDispatch()
-  // const handleLogout = () => {
-  //   console.log("Logout Clicked");
-  //   dispatch(unSetUserToken({access_token: null}))
-  //   dispatch(setUserInfo({email:"",name:""}))
-  //   removeToken()
-  //   navigate('/login')
-  // }
+  const handleLogout = () => {
+    console.log("Logout Clicked");
+    dispatch(unSetUserToken({access_token: null}))
+    dispatch(setUserInfo({email:"",name:""}))
+    removeToken()
+    navigate('/login')
+  }
   return (
     
     <div>
@@ -185,7 +185,7 @@ const Navbar = () => {
               </button>
             </div>
             {access_token ? (
-  <button className="btn btn-danger" >
+  <button onClick={handleLogout} className="btn btn-danger" >
     Logout
   </button>
 ) : (
