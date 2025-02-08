@@ -177,6 +177,9 @@ EMAIL_USE_SSL = True
 EMAIL_TIMEOUT = 30
 
 
+
+
+
 # JWT Settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=20),
