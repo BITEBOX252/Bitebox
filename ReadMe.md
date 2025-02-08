@@ -20,6 +20,7 @@ Backend and database setup
         Download and install PostgreSQL from PostgreSQL's official site https://sbp.enterprisedb.com/getfile.jsp?fileid=1259337
         During the setup in select components step check all the boxes
         In setup password phase enter password and remeber it because it will be used later to interact with postgresql. 
+        After setup is done at last step do not check the stack builder option(that is optional) just uncheck and click finish to install postgresql.
         Creating the Database via Terminal
         Open the PostgreSQL terminal (psql):
             psql -U postgres
@@ -33,13 +34,14 @@ Backend and database setup
             GRANT ALL PRIVILEGES ON DATABASE Bitebox TO Bitebox;
         
         Creating the Database via pgAdmin 4:
-            Install the pgadmin from the https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v9.0/windows/pgadmin4-9.0-x64.exe
-            Open pgAdmin 4 and connect to your PostgreSQL server.
+            Install the pgadmin from the https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v9.0/windows/pgadmin4-9.0-x64.exe if not installed at the posgresql installation time.
+            Open pgAdmin 4 from start menu and connect to your PostgreSQL server enter the password you created at the time of postgresql installation.
             Right-click on Databases → Click Create → Database.
             Enter Bitebox as the database name.
+            Right click on Bitebox database go to properties.
             Go to the Owner field and select Bitebox.
             Click Save.
-            Navigate to Login/Group Roles → Right-click Create → Login/Group Role.
+            Navigate to Login/Group Roles in the sidebar at last → Right-click Create → Login/Group Role.
             Enter Bitebox as the role name and set the password to Bitebox.
             Under the Privileges tab, grant all permissions.
             Click Save.
@@ -47,11 +49,15 @@ Backend and database setup
 
     Apply Migrations and Create Superuser
         Run migrations:
+            venv\Scripts\activate 
             python manage.py makemigrations
             python manage.py migrate
 
     Run the Django Server
+        venv\Scripts\activate 
         python manage.py runserver
+
+Note for running any python related or django related(backend) command makesure the virtual environment is activated if not activate it first by using venv\Scripts\activate then write the python or django commands.
 
 
 Frontend Setup (React)
