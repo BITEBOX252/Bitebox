@@ -36,9 +36,9 @@ function App() {
           <Route path="/register" element={<Registration />} />
           <Route path="/login" element={<UserLogin />} />
           <Route path="/logout" element={<Logout />} />
-          <Route path="sendpasswordresetemail" element={<SendPasswordResetEmail />} />
+          <Route path="/sendpasswordresetemail" element={<SendPasswordResetEmail />} />
           <Route path="api/user/reset/:id/:token" element={<ResetPassword />} />
-          <Route path="restaurant-register" element={ <Register  />}/> 
+          <Route path="/restaurant-register" element={ <Register  />}/> 
           <Route path='/detail/:id' element={<RestaurantDetail/>} />
           <Route path="/dishdetail/:slug" element={<DishDetail/>}/>
           <Route path="/dashboard" element={access_token ? <Dashboard /> : <Navigate to="/login" />} />

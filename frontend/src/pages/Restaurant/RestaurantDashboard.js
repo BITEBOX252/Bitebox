@@ -14,6 +14,7 @@ function RestaurantDashboard() {
   let { access_token } = getToken();
   const {data,isSuccess} = useGetLoggedUserQuery(access_token)
   useEffect(() => {
+    console.log(data)
     if (data?.restaurant_id) {  // ✅ Ensure restaurant_id exists before making API call
       axios.get(`http://127.0.0.1:8000/api/restaurant/stats/${data.restaurant_id}/`)
         .then((res) => {
@@ -32,7 +33,7 @@ function RestaurantDashboard() {
           console.error("Error fetching stats:", err);
         });
     }
-  }, [data]); // ✅ useEffect will re-run when `data` changes
+  }, [data]); 
   
   // useEffect(()=>{
   //   console.log(data)
@@ -52,7 +53,7 @@ function RestaurantDashboard() {
       
       <div className="col-md-9 col-lg-10 main mt-4">
         <div className="row mb-3">
-          <div className="col-xl-3 col-lg-6 mb-2">
+          <div className="col-xl-4 col-lg-6 mb-2">
             <div className="card card-inverse card-success">
               <div className="card-block bg-success p-3">
                 <div className="rotate">
@@ -63,7 +64,7 @@ function RestaurantDashboard() {
               </div>
             </div>
           </div>
-          <div className="col-xl-3 col-lg-6 mb-2">
+          <div className="col-xl-4 col-lg-6 mb-2">
             <div className="card card-inverse card-danger">
               <div className="card-block bg-danger p-3">
                 <div className="rotate">
@@ -74,7 +75,7 @@ function RestaurantDashboard() {
               </div>
             </div>
           </div>
-          <div className="col-xl-3 col-lg-6 mb-2">
+          {/* <div className="col-xl-3 col-lg-6 mb-2">
             <div className="card card-inverse card-info">
               <div className="card-block bg-info p-3">
                 <div className="rotate">
@@ -84,8 +85,8 @@ function RestaurantDashboard() {
                 <h1 className="display-1">125</h1>
               </div>
             </div>
-          </div>
-          <div className="col-xl-3 col-lg-6 mb-2">
+          </div> */}
+          <div className="col-xl-4 col-lg-6 mb-2">
             <div className="card card-inverse card-warning">
               <div className="card-block bg-warning p-3">
                 <div className="rotate">

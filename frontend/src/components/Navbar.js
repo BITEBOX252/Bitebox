@@ -5,11 +5,18 @@ import { useDispatch } from 'react-redux';
 import { unSetUserToken } from '../features/authSlice';
 import { setUserInfo } from '../features/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { useGetLoggedUserQuery } from '../services/userAuthApi';
+import { useSelector } from "react-redux";
+
 
 const Navbar = () => {
   const navigate = useNavigate()
   const {access_token} = getToken()
   const dispatch=useDispatch()
+  const {data,isSuccess} = useGetLoggedUserQuery(access_token)
+  const { access_token1 } = useSelector(state => state.auth);
+  
+  
   const handleLogout = () => {
     console.log("Logout Clicked");
     dispatch(unSetUserToken({access_token: null}))
@@ -97,6 +104,7 @@ const Navbar = () => {
                   </li>
                 </ul>
               </li>
+              { data?.id ? (
 
               <li className="nav-item dropdown">
                 <a
@@ -110,7 +118,9 @@ const Navbar = () => {
                   Restaurant
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
+                  {data?.restaurant_id ? (
+                    <>
+                    <li>
                     <Link className="dropdown-item" to="/restaurant/dashboard/">
                       {" "}
                       <i className="fas fa-user"></i> Dashboard
@@ -164,8 +174,21 @@ const Navbar = () => {
                       <i className="fas fa-gear fa-spin"></i> Settings
                     </Link>
                   </li>
+                  </>
+                  ):(
+                    <li>
+                    <Link className="dropdown-item" to="/restaurant-register">
+                      {" "}
+                      <i ></i> Register
+                    </Link>
+                  </li>
+                  )}
+                  
                 </ul>
               </li>
+              ):(
+                <h1></h1>
+              )}
             </ul>
             <div className="d-flex">
               <input
@@ -185,7 +208,7 @@ const Navbar = () => {
               </button>
             </div>
             {access_token ? (
-  <button onClick={handleLogout} className="btn btn-danger" >
+  <button onClick={handleLogout} className="btn btn-danger me-2" >
     Logout
   </button>
 ) : (

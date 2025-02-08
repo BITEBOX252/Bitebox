@@ -6,8 +6,44 @@ from shortuuid.django_fields import ShortUUIDField
 
 
 # Custom User Manager
+# class UserManager(BaseUserManager):
+#     def create_user(self, email, name, tc,latitude, longitude, password=None, password2=None):
+#         """
+#         Creates and saves a User with the given email, name, tc, and password.
+#         """
+#         if not email:
+#             raise ValueError('User must have an email address')
+
+#         user = self.model(
+#             email=self.normalize_email(email),
+#             name=name,
+#             tc=tc,
+#             latitude=latitude,
+#             longitude=longitude
+#         )
+
+#         user.set_password(password)
+#         user.is_active = True
+#         # user.is_staff=True
+#         user.save(using=self._db)
+#         return user
+
+#     def create_superuser(self, email, name, tc, password=None):
+#         """
+#         Creates and saves a superuser with the given email, name, tc, and password.
+#         """
+#         user = self.create_user(
+#             email=email,
+#             password=password,
+#             name=name,
+#             tc=tc,
+#         )
+#         user.is_admin = True
+#         user.is_active = True
+#         user.save(using=self._db)
+#         return user
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, tc,latitude, longitude, password=None, password2=None):
+    def create_user(self, email, name, tc, password=None,password2=None, latitude=None, longitude=None):
         """
         Creates and saves a User with the given email, name, tc, and password.
         """
@@ -24,7 +60,6 @@ class UserManager(BaseUserManager):
 
         user.set_password(password)
         user.is_active = True
-        # user.is_staff=True
         user.save(using=self._db)
         return user
 
@@ -37,6 +72,8 @@ class UserManager(BaseUserManager):
             password=password,
             name=name,
             tc=tc,
+            latitude=None,  # Make latitude and longitude optional
+            longitude=None
         )
         user.is_admin = True
         user.is_active = True

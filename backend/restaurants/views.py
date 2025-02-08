@@ -15,16 +15,19 @@ from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.authentication import TokenAuthentication 
 from django.db import models
 from account.serializers import ProfileSerializer
+
+
+
 class RestaurantCreateView(generics.CreateAPIView):
-    queryset = Restaurant.objects.all()
     serializer_class = RestaurantCreateSerializer
+    queryset = Restaurant.objects.all()
     permission_classes = [AllowAny]
  
     def create(self, request, *args, **kwargs):
         payload = request.data
 
         user_id = payload.get('user_id')
-
+        print(user_id)
         # Check if the user already has an associated restaurant
         if Restaurant.objects.filter(user_id=user_id).exists():
             return Response({"message": "User has already associated a restaurant with this account."}, status=status.HTTP_400_BAD_REQUEST)

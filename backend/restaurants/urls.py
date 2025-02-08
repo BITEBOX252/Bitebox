@@ -4,7 +4,7 @@ from .views import NearbyRestaurants,CouponStatAPIView,CouponListAPIView,CouponD
 urlpatterns = [
 
     path('nearby-restaurants/', NearbyRestaurants.as_view(), name='nearby_restaurants'),
-    path('register/', RestaurantCreateView.as_view(), name='nearby_restaurants'),
+    path('register/', RestaurantCreateView.as_view()),
     path('stats/<restaurant_id>/', DashboardStatAPIView.as_view()),
     path('dishes/<restaurant_id>/', DishAPIView.as_view()),
     path('orders/<restaurant_id>/', OrderAPIView.as_view()),
