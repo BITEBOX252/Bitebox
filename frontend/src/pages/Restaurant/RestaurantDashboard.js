@@ -180,7 +180,7 @@ function RestaurantDashboard() {
                       <td>{p.orders}</td>
                       <td>{p.status}</td>
                       <td>
-                        <Link to="" className="btn btn-primary mb-1 me-2">
+                        <Link to={`/dishdetail/${p.slug}`} className="btn btn-primary mb-1 me-2">
                           <i className="fas fa-eye" />
                         </Link>
                         <Link to="" className="btn btn-success mb-1 me-2">

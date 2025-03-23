@@ -18,13 +18,16 @@ class CategoryListAPIView(generics.ListAPIView):
     
 
 class DishListAPIView(generics.ListAPIView):
-    # queryset=Dish.objects.all()
+    queryset=Dish.objects.all()
     serializer_class=DishSerializer
     permission_classes=[AllowAny]
     def get_queryset(self):
         restaurant_id = self.request.query_params.get('restaurant_id')
+        print(restaurant_id)
         if restaurant_id:
-            return Dish.objects.filter(id=restaurant_id)
+            print(Dish.objects.filter(restaurant_id=restaurant_id))
+            return Dish.objects.filter(restaurant_id=restaurant_id)
+        
         return Dish.objects.all()
 
 class DishDetailAPIView(generics.RetrieveAPIView):

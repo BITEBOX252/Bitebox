@@ -48,7 +48,7 @@ class Dish(models.Model):  # Renamed from Product to Dish
     rating = models.IntegerField(default=0, null=True, blank=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     did = ShortUUIDField(unique=True, length=10, alphabet="abcdefg12345")
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True,null=True,blank=True)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -78,18 +78,30 @@ class Dish(models.Model):  # Renamed from Product to Dish
     def orders(self):
         return CartOrderItem.objects.filter(dish=self).count()
 
-    def save(self,*args, **kwargs):
-        if self.slug == "" or self.slug == None:
-            self.slug=slugify(self.title)
-        super(Dish,self).save(*args, **kwargs)
-        self.rating=self.dish_rating()
-        super(Dish,self).save(*args, **kwargs)
+    # def save(self,*args, **kwargs):
+    #     if self.slug == "" or self.slug == None:
+    #         self.slug=slugify(self.title)
+    #     super(Dish,self).save(*args, **kwargs)
+    #     self.rating=self.dish_rating()
+    #     super(Dish,self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if not self.slug:  # Simplified slug check
+            self.slug = slugify(self.title)
+
+        is_new = self.pk is None  # Check if the object is new
+
+        super(Dish, self).save(*args, **kwargs)  # ✅ First save to assign primary key
+
+        if not is_new:  # Avoid querying related objects before saving
+            self.rating = self.dish_rating()
+            super(Dish, self).save(update_fields=["rating"])  # ✅ Only update rating
+
 
 
 class PortionSize(models.Model):
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name='portion_sizes')
-    size_name = models.CharField(max_length=50)  # e.g., "Small", "Medium", "Large"
-    price = models.DecimalField(decimal_places=2, max_digits=12)  # Price for the specific portion size
+    dish = models.ForeignKey(Dish, on_delete=models.SET_NULL,null=True, related_name='portion_sizes')
+    size_name = models.CharField(max_length=50,null=True,blank=True)  # e.g., "Small", "Medium", "Large"
+    price = models.DecimalField(decimal_places=2, max_digits=12,null=True,blank=True)  # Price for the specific portion size
 
     def __str__(self):
         return f"{self.size_name} for {self.dish.title}"
@@ -102,17 +114,17 @@ class PortionSize(models.Model):
     
 
 class SpiceLevel(models.Model):
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name='spice_levels')
-    level_name = models.CharField(max_length=50)  # e.g., "Mild", "Medium", "Spicy"
-    additional_price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)  # Optional extra charge for spicier versions
+    dish = models.ForeignKey(Dish, on_delete=models.SET_NULL,null=True, related_name='spice_levels')
+    level_name = models.CharField(max_length=50,null=True,blank=True)  # e.g., "Mild", "Medium", "Spicy"
+    additional_price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00,null=True,blank=True)  # Optional extra charge for spicier versions
 
     def __str__(self):
         return f"{self.level_name} for {self.dish.title}"
 
 
 class  Gallery(models.Model):
-    dish=models.ForeignKey(Dish,on_delete=models.CASCADE)
-    image=models.FileField(upload_to="dish_images",default="dish.jpg")
+    dish=models.ForeignKey(Dish,on_delete=models.SET_NULL,null=True)
+    image=models.FileField(upload_to="dish_images",default="dish.jpg",null=True,blank=True)
     active=models.BooleanField(default=True)
     gid=ShortUUIDField(unique=True,length=10,alphabet="abcdefgh12345")
 
@@ -123,9 +135,9 @@ class  Gallery(models.Model):
 
 
 class Specification(models.Model):
-    dish=models.ForeignKey(Dish,on_delete=models.CASCADE)
-    title=models.CharField(max_length=100)
-    content=models.CharField(max_length=1000)
+    dish=models.ForeignKey(Dish,on_delete=models.SET_NULL,null=True)
+    title=models.CharField(max_length=100,null=True,blank=True)
+    content=models.CharField(max_length=1000,null=True,blank=True)
     
     
     def __str__(self):
@@ -250,7 +262,7 @@ class Review(models.Model):
         (5,"5 star"),
     )
     user=models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
-    dish=models.ForeignKey(Dish,on_delete=models.CASCADE)
+    dish=models.ForeignKey(Dish,on_delete=models.SET_NULL,null=True,blank=True)
     review=models.TextField()
     reply=models.TextField(null=True,blank=True)
     rating=models.IntegerField(default=None,choices=RATING_CHOICES)

@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework import generics,status
 from store.models import Dish,CartOrder,CartOrderItem,Review,Coupon,Notification
-from store.serializers import SummarySerializer,DishSerializer,RestaurantSerializer,NotificationSerializer,NotificationSummarySerializer,CouponSummarySerializer,CouponSerializer,ReviewSerializer, CartOrderSerializer,CartOrderItemSerializer
+from store.serializers import SummarySerializer,DishSerializer,RestaurantSerializer,NotificationSerializer,NotificationSummarySerializer,CouponSummarySerializer,CouponSerializer,ReviewSerializer, CartOrderSerializer,CartOrderItemSerializer,SpecificationSerializer,SpiceLevelSerializer,PortionSizeSerializer,GallerySerializer
 from .models import Restaurant
 from .serializers import RestaurantCreateSerializer
 from rest_framework.response import Response
@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.authentication import TokenAuthentication 
 from django.db import models
 from account.serializers import ProfileSerializer
-
+from django.db import transaction
 
 
 class RestaurantCreateView(generics.CreateAPIView):
@@ -137,6 +137,7 @@ class DishAPIView(generics.ListAPIView):
     def get_queryset(self):
         restaurant_id=self.kwargs['restaurant_id']
         restaurant=Restaurant.objects.get(id=restaurant_id)
+        print(Dish.objects.filter(restaurant=restaurant).order_by('-id'))
         return Dish.objects.filter(restaurant=restaurant).order_by('-id')
     
 
@@ -356,6 +357,191 @@ class RestaurantDishAPIView(generics.RetrieveUpdateAPIView):
         restaurant=Restaurant.objects.get(slug=restaurant_slug)
 
         return Dish.objects.filter(restaurant=restaurant)
+
+
+class DishCreateAPIView(generics.CreateAPIView):
+    queryset=Dish.objects.all()
+    serializer_class=DishSerializer
+
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        # dish_instance=serializer.instance
+        # specification_data=[]
+        # level_data=[]
+        # size_data=[]
+        # gallery_data=[]
+        
+        # for key,value in self.request.data.item():
+        #     if key.startwith('specifications') and ['title'] in key:
+        #         index=key.split('[')[1].split(']')[0]
+        #         title=value
+        #         content_key=f'specifications[{index}][content]'
+        #         content=self.request.data.get(content_key)
+        #         specification_data.append({'title':title,'content':content})
+
+        #     elif key.startwith('spiceLevel') and ['level_name'] in key:
+        #         index=key.split('[')[1].split(']')[0]
+        #         level_name=value
+        #         additional_price_key=f'spiceLevel[{index}][additional_price]'
+        #         additional_price=self.request.data.get(additional_price_key)
+        #         level_data.append({'level_name':level_name,'additional_price':additional_price})
+            
+        #     elif key.startwith('sizes') and ['name'] in key:
+        #         index=key.split('[')[1].split(']')[0]
+        #         name=value
+        #         price_key=f'sizes[{index}][price]'
+        #         price=self.request.data.get(price_key)
+        #         size_data.append({'name':name,'price':price})
+            
+        #     elif key.startwith('gallery') and ['image'] in key:
+        #         index=key.split('[')[1].split(']')[0]
+        #         image=value
+        #         gallery_data.append({'image':image})
+
+        dish_instance = serializer.instance
+        specification_data = []
+        level_data = []
+        size_data = []
+        gallery_data = []
+
+        for key, value in self.request.data.items():  # ✅ Fix items() method
+            if key.startswith('specifications') and 'title' in key:  # ✅ Fix startswith() and key checking
+                index = key.split('[')[1].split(']')[0]
+                title = value
+                content_key = f'specifications[{index}][content]'
+                content = self.request.data.get(content_key)
+                specification_data.append({'title': title, 'content': content})
+
+            elif key.startswith('spiceLevel') and 'level_name' in key:
+                index = key.split('[')[1].split(']')[0]
+                level_name = value
+                additional_price_key = f'spiceLevel[{index}][additional_price]'
+                additional_price = self.request.data.get(additional_price_key)
+                level_data.append({'level_name': level_name, 'additional_price': additional_price})
+
+            elif key.startswith('sizes') and 'size_name' in key:
+                index = key.split('[')[1].split(']')[0]
+                size_name = value
+                price_key = f'sizes[{index}][price]'
+                price = self.request.data.get(price_key)
+                size_data.append({'size_name': size_name, 'price': price})
+
+            elif key.startswith('gallery') and 'image' in key:
+                index = key.split('[')[1].split(']')[0]
+                image = value
+                gallery_data.append({'image': image})  # ✅ Remove the extra comma
+
+        
+        print('specifications',specification_data)
+        print('levels',level_data)
+        print('sizes',size_data)
+        print('gallery',gallery_data)
+        self.save_nested_data(dish_instance,SpecificationSerializer,specification_data)
+        self.save_nested_data(dish_instance,SpiceLevelSerializer,level_data)
+        self.save_nested_data(dish_instance,PortionSizeSerializer,size_data)
+        self.save_nested_data(dish_instance,GallerySerializer,gallery_data)
+        # return super().perform_create(serializer)
+
+    def save_nested_data(self,dish_instance,serializer_class,data):
+            serializer=serializer_class(data=data,many=True,context={'dish_instance':dish_instance})
+            serializer.is_valid(raise_exception=True)
+            serializer.save(dish=dish_instance)
+
+
+class DishDeleteAPIView(generics.DestroyAPIView):
+    queryset = Dish.objects.all()
+    serializer_class = DishSerializer
+    permission_classes = (AllowAny, )
+
+    def get_object(self):
+        restaurant_id = self.kwargs['restaurant_id']
+        dish_did = self.kwargs['dish_did']
+
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+        dish = Dish.objects.get(restaurant=restaurant, did=dish_did)
+        return dish
+
+
+
+class DishUpdateAPIView(generics.RetrieveUpdateAPIView):
+    queryset=Dish.objects.all()
+    serializer_class=DishSerializer
     
 
+    def get_object(self):
+        restaurant_id = self.kwargs['restaurant_id']
+        dish_did = self.kwargs['dish_did']
 
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+        dish = Dish.objects.get(restaurant=restaurant, did=dish_did)
+        return dish
+
+
+
+    @transaction.atomic
+    def update(self,request,*args, **kwargs ):
+       
+        dish = self.get_object()
+        serializer=self.get_serializer(dish,data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        dish.specification().delete()
+        dish.spice_level().delete()
+        dish.portion_size().delete()
+        dish.gallery().delete()
+
+
+
+        specification_data = []
+        level_data = []
+        size_data = []
+        gallery_data = []
+
+        for key, value in self.request.data.items():  # ✅ Fix items() method
+            if key.startswith('specifications') and 'title' in key:  # ✅ Fix startswith() and key checking
+                index = key.split('[')[1].split(']')[0]
+                title = value
+                content_key = f'specifications[{index}][content]'
+                content = self.request.data.get(content_key)
+                specification_data.append({'title': title, 'content': content})
+
+            elif key.startswith('spiceLevel') and 'level_name' in key:
+                index = key.split('[')[1].split(']')[0]
+                level_name = value
+                additional_price_key = f'spiceLevel[{index}][additional_price]'
+                additional_price = self.request.data.get(additional_price_key)
+                level_data.append({'level_name': level_name, 'additional_price': additional_price})
+
+            elif key.startswith('sizes') and 'size_name' in key:
+                index = key.split('[')[1].split(']')[0]
+                size_name = value
+                price_key = f'sizes[{index}][price]'
+                price = self.request.data.get(price_key)
+                size_data.append({'size_name': size_name, 'price': price})
+
+            elif key.startswith('gallery') and 'image' in key:
+                index = key.split('[')[1].split(']')[0]
+                image = value
+                gallery_data.append({'image': image})  # ✅ Remove the extra comma
+
+        
+        print('specifications',specification_data)
+        print('levels',level_data)
+        print('sizes',size_data)
+        print('gallery',gallery_data)
+        self.save_nested_data(dish,SpecificationSerializer,specification_data)
+        self.save_nested_data(dish,SpiceLevelSerializer,level_data)
+        self.save_nested_data(dish,PortionSizeSerializer,size_data)
+        self.save_nested_data(dish,GallerySerializer,gallery_data)
+        # return super().perform_create(serializer)
+        return Response({'message': 'Product Updated'}, status=status.HTTP_200_OK)
+
+    def save_nested_data(self,dish_instance,serializer_class,data):
+            serializer=serializer_class(data=data,many=True,context={'dish_instance':dish_instance})
+            serializer.is_valid(raise_exception=True)
+            serializer.save(dish=dish_instance)

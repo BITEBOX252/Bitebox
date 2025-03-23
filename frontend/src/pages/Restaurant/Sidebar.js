@@ -56,7 +56,7 @@ function Sidebar() {
         </li>
 
         <li className="mb-3">
-            <Link to="/vendor/settings/" className={isActiveLink(location.pathname, '/restaurant//')?"nav-link text-white active":"nav-link text-white"}>
+            <Link to="/restaurant/settings/" className={isActiveLink(location.pathname, '/restaurant/settings/')?"nav-link text-white active":"nav-link text-white"}>
                 <i className="bi bi-gear-fill" /> Settings{" "}
             </Link>
         </li>

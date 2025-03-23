@@ -1,37 +1,35 @@
 import React,{useState,useEffect} from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useParams } from 'react-router-dom';
 import { useGetLoggedUserQuery } from '../../services/userAuthApi'
 import { getToken } from '../../services/LocalStorageService'
 import Sidebar from './Sidebar';
 import axios from 'axios';
 
-function AddDish() {
+function UpdateDish() {
     let { access_token } = getToken();
     const {data:userdata,isSuccess} = useGetLoggedUserQuery(access_token)
-    // useEffect(()=>{
-    //   console.log(userdata)
-    // },[userdata])
+    const param=useParams()
     const [dish, setDish] = useState({
-        title: '',
-        image: null,
-        description: '',
-        category: '',
-        tags: '',
-        // brand: '',
-        price: '',
-        old_price: '',
-        shipping_amount: '',
-        stock_qty: '',
-        restaurant:null
-    });
-    useEffect(() => {
-      if (userdata) {
-          setDish(prevState => ({
-              ...prevState,
-              restaurant: userdata.restaurant_id // ✅ Update restaurant ID once userdata is fetched
-          }));
-      }
-  }, [userdata]); 
+            title: '',
+            image: null,
+            description: '',
+            category: '',
+            tags: '',
+            // brand: '',
+            price: '',
+            old_price: '',
+            shipping_amount: '',
+            stock_qty: '',
+            restaurant:null
+        });
+        useEffect(() => {
+          if (userdata) {
+              setDish(prevState => ({
+                  ...prevState,
+                  restaurant: userdata.restaurant_id // ✅ Update restaurant ID once userdata is fetched
+              }));
+          }
+      }, [userdata]); 
     const [specifications, setSpecifications] = useState([{ title: '', content: '' }]);
     const [spiceLevels, setSpiceLevels] = useState([{ level_name: '', additional_price: 0.00}]);
     const [sizes, setSizes] = useState([{ size_name: '', price: 0.00 }]);
@@ -39,6 +37,7 @@ function AddDish() {
     const [category, setCategory] = useState([]);
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
+
     const handleAddMore = (setStateFunction) => {
         setStateFunction((prevState) => [...prevState, {}]);
     };
@@ -112,7 +111,6 @@ function AddDish() {
             reader.readAsDataURL(file);
         }
     }
-
     useEffect(() => {
         const fetchCategory = async () => {
             axios.get('http://127.0.0.1:8000/api/store/categories/').then((res) => {
@@ -123,96 +121,104 @@ function AddDish() {
         fetchCategory()
     }, [])
 
-
+    useEffect(()=>{
+        axios.get(`http://127.0.0.1:8000/api/restaurant/update-dish/${userdata?.restaurant_id}/${param.did}/`).then((res)=>{
+            console.log(res.data);
+            setDish(res.data)
+            setSpecifications(res.data.specification)
+            setSizes(res.data.portion_size)
+            setSpiceLevels(res.data.spice_level)
+            setGallery(res.data.gallery)
+        })
+    },[])
     const handleSubmit = async (e) => {
-      e.preventDefault();
-      setIsLoading(true)
-      if (dish.title == "" || dish.description == "" || dish.price == "" || dish.category === null || dish.shipping_amount == "" || dish.stock_qty == "" || dish.image === null) {
-          // If any required field is missing, show an error message or take appropriate action
-          console.log("Please fill in all required fields");
-          setIsLoading(false)
+        e.preventDefault();
+        setIsLoading(true)
+        if (dish.title == "" || dish.description == "" || dish.price == "" || dish.category === null || dish.shipping_amount == "" || dish.stock_qty == "" || dish.image === null) {
+            // If any required field is missing, show an error message or take appropriate action
+            console.log("Please fill in all required fields");
+            setIsLoading(false)
+  
+            // Swal.fire({
+            //     icon: 'warning',
+            //     title: 'Missing Fields!',
+            //     text: "All fields are required to create a product",
+            // })
+            return;
+        }
+  
+        try {
+            // Create a FormData object
+            setIsLoading(true)
+            const formData = new FormData();
+  
+            // Append dish data
+            Object.entries(dish).forEach(([key, value]) => {
+                if (key === 'image' && value) {
+                    formData.append(key, value.file);  // Assuming 'value' is an object with 'file' property
+                } else {
+                    formData.append(key, value);
+                }
+            });
+  
+            // Append specifications data
+            specifications.forEach((specification, index) => {
+                Object.entries(specification).forEach(([key, value]) => {
+                    formData.append(`specifications[${index}][${key}]`, value);
+                });
+            });
+  
+  
+            spiceLevels.forEach((level, index) => {
+                Object.entries(level).forEach(([key, value]) => {
+                    if (key === 'image' && value && value.file && value.file.type.startsWith('image/')) {
+                        formData.append(`spiceLevel[${index}][${key}]`, value.file, value.file.name);
+                    } else {
+                        console.log(String(value));
+                        formData.append(`spiceLevel[${index}][${key}]`, String(value)); // Convert `value` to a string
+                    }
+                });
+            });
+  
+            // Append sizes data
+            sizes.forEach((size, index) => {
+                Object.entries(size).forEach(([key, value]) => {
+                    formData.append(`sizes[${index}][${key}]`, value);
+                });
+            });
+  
+            // Append gallery data
+            gallery.forEach((item, index) => {
+                if (item.image) {
+                    formData.append(`gallery[${index}][image]`, item.image.file);
+                }
+            });
+  
+            const response = await axios.patch(`http://127.0.0.1:8000/api/restaurant/update-dish/${userdata?.restaurant_id}/${param.did}/`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+  
+            navigate('/restaurant/dishes/')
+  
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: 'Product Created Successfully',
+            //     text: 'This product has been successfully created',
+            // });
+  
+  
+  
+            const data = await response.json();
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setIsLoading(false)
+  
+        }
+    };
+  
 
-          // Swal.fire({
-          //     icon: 'warning',
-          //     title: 'Missing Fields!',
-          //     text: "All fields are required to create a product",
-          // })
-          return;
-      }
-
-      try {
-          // Create a FormData object
-          setIsLoading(true)
-          const formData = new FormData();
-
-          // Append dish data
-          Object.entries(dish).forEach(([key, value]) => {
-              if (key === 'image' && value) {
-                  formData.append(key, value.file);  // Assuming 'value' is an object with 'file' property
-              } else {
-                  formData.append(key, value);
-              }
-          });
-
-          // Append specifications data
-          specifications.forEach((specification, index) => {
-              Object.entries(specification).forEach(([key, value]) => {
-                  formData.append(`specifications[${index}][${key}]`, value);
-              });
-          });
-
-
-          spiceLevels.forEach((level, index) => {
-              Object.entries(level).forEach(([key, value]) => {
-                  if (key === 'image' && value && value.file && value.file.type.startsWith('image/')) {
-                      formData.append(`spiceLevel[${index}][${key}]`, value.file, value.file.name);
-                  } else {
-                      console.log(String(value));
-                      formData.append(`spiceLevel[${index}][${key}]`, String(value)); // Convert `value` to a string
-                  }
-              });
-          });
-
-          // Append sizes data
-          sizes.forEach((size, index) => {
-              Object.entries(size).forEach(([key, value]) => {
-                  formData.append(`sizes[${index}][${key}]`, value);
-              });
-          });
-
-          // Append gallery data
-          gallery.forEach((item, index) => {
-              if (item.image) {
-                  formData.append(`gallery[${index}][image]`, item.image.file);
-              }
-          });
-
-          const response = await axios.post(`http://127.0.0.1:8000/api/restaurant/create-dish/${userdata?.restaurant_id}/`, formData, {
-              headers: {
-                  'Content-Type': 'multipart/form-data',
-              },
-          });
-
-          navigate('/restaurant/dishes/')
-
-          // Swal.fire({
-          //     icon: 'success',
-          //     title: 'Product Created Successfully',
-          //     text: 'This product has been successfully created',
-          // });
-
-
-
-          const data = await response.json();
-      } catch (error) {
-          console.error('Error submitting form:', error);
-          setIsLoading(false)
-
-      }
-  };
-
-
-    
   return (
     <div className="container-fluid" id="main">
     <div className="row row-offcanvas row-offcanvas-left h-100">
@@ -376,10 +382,13 @@ function AddDish() {
                     
                             <div className="row text-dark">
                         <div className="col-lg-6 mb-2">
-                            {item.image && (
+                            {item.image && (item.image.preview ? (
 
                             <img src={item.image.preview} style={{height:"200px",width:"100%",objectFit:"cover",borderRadius:"10px"}}/>
-                            )}
+                        ):(
+                                <img src={item.image} style={{height:"200px",width:"100%",objectFit:"cover",borderRadius:"10px"}}/>
+
+                            ))}
                             {!item.image && (
 
                             <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" style={{height:"200px",width:"100%",objectFit:"cover",borderRadius:"10px"}}/>
@@ -394,7 +403,7 @@ function AddDish() {
                           />
                         </div>
                         <div className="col-lg-3">
-                            <button onClick={()=>handleRemove(index,setGallery)} type='button' className="btn btn-danger mt-4">
+                            <button onClick={()=>handleRemove(index,setGallery)}  className="btn btn-danger mt-4">
                               Remove
                             </button>
                         </div>
@@ -450,7 +459,7 @@ function AddDish() {
                           />
                         </div>
                         <div className="col-lg-2">
-                        <button onClick={()=>handleRemove(index,setSpecifications)} type='button' className="btn btn-danger mt-4">
+                        <button onClick={()=>handleRemove(index,setSpecifications)}  className="btn btn-danger mt-4">
                               Remove
                             </button>
                         </div>
@@ -553,7 +562,7 @@ function AddDish() {
                           />
                         </div>
                         <div  className="col-lg-2">
-                        <button onClick={()=>handleRemove(index,setSizes)} type='button' className="btn btn-danger mt-4">
+                        <button onClick={()=>handleRemove(index,setSizes)}  className="btn btn-danger mt-4">
                               Remove
                             </button>
                         </div>
@@ -617,7 +626,7 @@ function AddDish() {
                           />
                         </div>
                         <div  className="col-lg-2">
-                        <button onClick={()=>handleRemove(index,setSpiceLevels)} type='button' className="btn btn-danger mt-4">
+                        <button onClick={()=>handleRemove(index,setSpiceLevels)}  className="btn btn-danger mt-4">
                               Remove
                             </button>
                         </div>
@@ -715,7 +724,7 @@ function AddDish() {
                 </li>
               </ul>
               <div className="d-flex justify-content-center mb-5">
-                <button  className="btn btn-success w-50" type='submit'>
+                <button className="btn btn-success w-50" type='submit'>
                   Add Dish <i className="fa fa-check-circle" />{" "}
                 </button>
               </div>
@@ -726,8 +735,7 @@ function AddDish() {
     </div>
   </div>
 </div>
-
   )
 }
 
-export default AddDish
+export default UpdateDish

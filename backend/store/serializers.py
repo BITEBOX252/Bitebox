@@ -40,7 +40,9 @@ class DishSerializer(serializers.ModelSerializer):
     #For telling react that these are the inline in the django,these are the same names which are in the model methods of product
     class Meta:
         model=Dish
-        fields=['id','title','image','description','category','price','old_price','orders','shipping_amount','stock_qty','in_stock','status','featured','views','rating','restaurant','gallery','specification','spice_level','portion_size','did','slug','date','dish_rating','rating_count']
+        fields=['id','title','image','description','category','price','old_price','orders','shipping_amount','stock_qty','in_stock','status','featured','views',
+                # 'rating',
+                'restaurant','gallery','specification','spice_level','portion_size','did','slug','date','dish_rating','rating_count']
     def __init__(self,*args, **kwargs):
         super(DishSerializer,self).__init__(*args, **kwargs)
         request=self.context.get("request")

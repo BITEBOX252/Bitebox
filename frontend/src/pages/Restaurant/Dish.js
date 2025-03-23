@@ -7,7 +7,7 @@ import { useGetLoggedUserQuery } from '../../services/userAuthApi'
 import { getToken } from '../../services/LocalStorageService'
 import { Link } from 'react-router-dom'
 function Dish() {
-    const [products,setProducts]=useState([])
+    const [dishes,setDishes]=useState([])
     let { access_token } = getToken();
     const {data,isSuccess} = useGetLoggedUserQuery(access_token)
     useEffect(() => {
@@ -15,7 +15,7 @@ function Dish() {
           
             axios.get(`http://127.0.0.1:8000/api/restaurant/dishes/${data.restaurant_id}/`).
             then((res) => {
-              setProducts(res.data);
+              setDishes(res.data);
               console.log(res.data);
             })
             .catch((err) => {
@@ -23,6 +23,15 @@ function Dish() {
             });
         }
       }, [data]); // ✅ useEffect will re-run when `data` changes
+
+      const handleDeleteDish= async (dishdid)=>{
+        await axios.delete(`http://127.0.0.1:8000/api/restaurant/delete-dish/${data.restaurant_id}/${dishdid}/`)
+        await axios.get(`http://127.0.0.1:8000/api/restaurant/dishes/${data.restaurant_id}/`).
+            then((res) => {
+              setDishes(res.data);
+              console.log(res.data);
+            })
+      }
   return (
     <div className="container-fluid" id="main">
   <div className="row row-offcanvas row-offcanvas-left h-100">
@@ -30,7 +39,7 @@ function Dish() {
     <div className="col-md-9 col-lg-10 main mt-4">
       <div className="row mb-3 container">
         <h4>
-          <i className="bi bi-grid" /> All Products
+          <i className="bi bi-grid" /> All Dishes
         </h4>
         <div className="dropdown">
           <button
@@ -84,27 +93,27 @@ function Dish() {
                          </tr>
                        </thead>
                        <tbody>
-                         {products?.map((p,index)=>(
+                         {dishes?.map((d,index)=>(
      
                          <tr key={index}>
                            <th scope="row">
                              <img src=
-                             {p.image} style={{width:"100px",height:"60px",objectFit:"cover",borderRadius:"10px"}} /></th>
-                           <td>{p.title}</td>
-                           <td>${p.price}</td>
-                           <td>{p.stock_qty}</td>
-                           <td>{p.orders}</td>
-                           <td>{p.status}</td>
+                             {d.image} style={{width:"100px",height:"60px",objectFit:"cover",borderRadius:"10px"}} /></th>
+                           <td>{d.title}</td>
+                           <td>${d.price}</td>
+                           <td>{d.stock_qty}</td>
+                           <td>{d.orders}</td>
+                           <td>{d.status}</td>
                            <td>
                              <Link to="" className="btn btn-primary mb-1 me-2">
                                <i className="fas fa-eye" />
                              </Link>
-                             <Link to="" className="btn btn-success mb-1 me-2">
+                             <Link to={`/restaurant/dish/update/${d.did}/`} className="btn btn-success mb-1 me-2">
                                <i className="fas fa-edit" />
                              </Link>
-                             <Link to="" className="btn btn-danger mb-1 me-2">
+                             <button onClick={()=>handleDeleteDish(d.did)} className="btn btn-danger mb-1 me-2">
                                <i className="fas fa-trash" />
-                             </Link>
+                             </button>
                            </td>
                          </tr>
                          ))}

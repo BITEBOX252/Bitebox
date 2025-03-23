@@ -1,6 +1,5 @@
-
 from django.urls import path, include
-from .views import NearbyRestaurants,CouponStatAPIView,CouponListAPIView,CouponDetailAPIView,ReviewListAPIView,ReviewDetailAPIView,RestaurantCreateView,DashboardStatAPIView,RevenueAPIView,DishAPIView,OrderAPIView,OrderDetailAPIView,NotificationUnseenAPIView,NotificationseenAPIView,NotificationSummaryAPIView,NotificationRestaurantMarkAsSeenAPIView,RestaurantUpdateAPIView,RestaurantOwnerProfileUpdateAPIView,RestaurantAPIView,RestaurantDishAPIView
+from .views import NearbyRestaurants,CouponStatAPIView,CouponListAPIView,CouponDetailAPIView,ReviewListAPIView,ReviewDetailAPIView,RestaurantCreateView,DashboardStatAPIView,RevenueAPIView,DishAPIView,OrderAPIView,OrderDetailAPIView,NotificationUnseenAPIView,NotificationseenAPIView,NotificationSummaryAPIView,NotificationRestaurantMarkAsSeenAPIView,RestaurantUpdateAPIView,RestaurantOwnerProfileUpdateAPIView,RestaurantAPIView,RestaurantDishAPIView,DishCreateAPIView,DishDeleteAPIView,DishUpdateAPIView
 urlpatterns = [
 
     path('nearby-restaurants/', NearbyRestaurants.as_view(), name='nearby_restaurants'),
@@ -23,7 +22,8 @@ urlpatterns = [
     path('settings-update/<int:pk>/', RestaurantUpdateAPIView.as_view()),
     path('shop/<restaurant_slug>/', RestaurantAPIView.as_view()),
     path('dishes/<restaurant_slug>/', RestaurantDishAPIView.as_view()),
-
-
+    path('create-dish/<restaurant_id>/', DishCreateAPIView.as_view()),
+    path('delete-dish/<restaurant_id>/<dish_did>/', DishDeleteAPIView.as_view()),
+    path('update-dish/<restaurant_id>/<dish_did>/', DishUpdateAPIView.as_view()),
 
 ]
