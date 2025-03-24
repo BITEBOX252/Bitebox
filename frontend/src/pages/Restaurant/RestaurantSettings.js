@@ -8,8 +8,8 @@ import { getToken } from '../../services/LocalStorageService'
 function RestaurantSettings() {
     // const [profileData, setProfileData] = useState({ 'full_name': '', 'mobile': '', 'email': '', 'about': '', 'country': '', 'city': '', 'state': '', 'address': '', 'p_image': '', });
     const [profileData, setProfileData] = useState([]);
-      const [vendorData, setVendorData] = useState([]);
-      const [vendorImage, setVendorImage] = useState("");
+      const [restaurantData, setRestaurantData] = useState([]);
+      const [restaurantImage, setRestaurantImage] = useState("");
       const [profileImage, setprofileImage] = useState("");
 
 
@@ -37,9 +37,31 @@ function RestaurantSettings() {
           console.error('Error fetching profile data:', error);
         }
       };
+      const fetchRestaurantData = async () => {
+          try {
+              axios.get(`http://127.0.0.1:8000/api/restaurant/settings-update/${data.id}/`).then((res) => {
+              setRestaurantData(res.data)
+            console.log(res.data);
+        //     setProfileData({
+        //         'full_name': res.data?.full_name,
+        //         'email': res.data.user.email,
+        //         'phone': res.data.user.phone,
+        //         'about': res.data.about,
+        //         'country': res.data.country,
+        //         'city': res.data.city,
+        //         'state': res.data.state,
+        //         'address': res.data.address,
+        //         'p_image': res.data.image,
+        //       })
+              setRestaurantImage(res.data.image)
+          })
+        } catch (error) {
+          console.error('Error fetching profile data:', error);
+        }
+      };
       useEffect(() => {
         fetchProfileData();
-      
+        fetchRestaurantData();
         
       }, [])
       const handleInputChange = (event) => {
@@ -52,6 +74,20 @@ function RestaurantSettings() {
       const handleFileChange = (event) => {
         setProfileData({
           ...profileData,
+          [event.target.name]: event.target.files[0]
+        })
+      }
+
+      const handleRestaurantInputChange = (event) => {
+        setRestaurantData({
+          ...restaurantData,
+          [event.target.name]: event.target.value
+        })
+      };
+    
+      const handleRestaurantFileChange = (event) => {
+        setRestaurantData({
+          ...restaurantData,
           [event.target.name]: event.target.files[0]
         })
       }
@@ -80,6 +116,33 @@ function RestaurantSettings() {
             },
           });
           fetchProfileData()
+          
+    
+        } catch (error) {
+          console.error('Error updating profile:', error);
+        }
+      };
+      const handleRestaurantFormSubmit = async (e) => {
+        e.preventDefault();
+        // setLoading(true)
+    
+        const res = await  axios.get(`http://127.0.0.1:8000/api/restaurant/settings-update/${data.id}/`);
+    
+        const formData = new FormData();
+        if (restaurantData.image && restaurantData.image !== res.data.image) {
+          formData.append('image', restaurantData.image);
+        }
+        formData.append('name', restaurantData.name);
+        formData.append('description', restaurantData.description);
+        
+    
+        try {
+          axios.patch(`http://127.0.0.1:8000/api/restaurant/settings-update/${data.id}/`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+          });
+          fetchRestaurantData()
           
     
         } catch (error) {
@@ -236,15 +299,15 @@ function RestaurantSettings() {
                     <div className="card-body">
                       <div className="d-flex flex-column align-items-center text-center">
                         <img
-                          src="https://img.freepik.com/free-vector/cartoon-style-cafe-front-shop-view_134830-697.jpg"
+                          src={restaurantImage}
                           style={{ width: 160, height: 160, objectFit: "cover" }}
                           alt="Admin"
                           className="rounded-circle"
                           width={150}
                         />
                         <div className="mt-3">
-                          <h4 className="text-dark">Desphixs</h4>
-                          <p className="text-secondary mb-1">We sell cloths here</p>
+                          <h4 className="text-dark">{restaurantData.name}</h4>
+                          <p className="text-secondary mb-1">{restaurantData.description}</p>
                         </div>
                       </div>
                     </div>
@@ -258,28 +321,32 @@ function RestaurantSettings() {
                         method="POST"
                         noValidate=""
                         encType="multipart/form-data"
+                        onSubmit={handleRestaurantFormSubmit}
                       >
                         <div className="row text-dark">
                           <div className="col-lg-12 mb-2">
                             <label htmlFor="" className="mb-2">
-                              Shop Image
+                              Restaurant Image
                             </label>
                             <input
                               type="file"
                               className="form-control"
-                              name=""
+                              name="image"
                               id=""
+                              onChange={handleRestaurantFileChange}
                             />
                           </div>
                           <div className="col-lg-12 mb-2 ">
                             <label htmlFor="" className="mb-2">
-                              Full Name
+                              Restaurant Name
                             </label>
                             <input
                               type="text"
                               className="form-control"
-                              name=""
+                              name="name"
                               id=""
+                              onChange={handleRestaurantInputChange}
+                              value={restaurantData.name}
                             />
                           </div>
                           <div className="col-lg-6 mb-2">
@@ -289,8 +356,10 @@ function RestaurantSettings() {
                             <input
                               type="text"
                               className="form-control"
-                              name=""
+                              name="email"
+                              onChange={handleRestaurantInputChange}
                               id=""
+                              value={restaurantData.email}
                             />
                           </div>
                           <div className="col-lg-6 mb-2">
@@ -300,17 +369,33 @@ function RestaurantSettings() {
                             <input
                               type="text"
                               className="form-control"
-                              name=""
+                              name="phone_number"
+                              onChange={handleRestaurantInputChange}
                               id=""
+                              value={restaurantData.phone_number}
+
                             />
+                          </div>
+                          <div className="col-lg-12 mb-2">
+                            <label htmlFor="" className="mb-2">
+                              Description
+                            </label>
+                            <textarea
+                              
+                              name="description"
+                              className="form-control"
+                              onChange={handleRestaurantInputChange}
+                              id=""
+                              value={restaurantData.description}
+                            ></textarea>
                           </div>
                           <div className="col-lg-6 mt-4 mb-3">
                             <button className="btn btn-success" type="submit">
-                              Update Shop <i className="fas fa-check-circle" />{" "}
+                              Update Restaurant <i className="fas fa-check-circle" />{" "}
                             </button>
-                            <button className="btn btn-primary" type="submit">
-                              View Shop <i className="fas fa-shop" />{" "}
-                            </button>
+                            <Link to={`/restaurant/store/${restaurantData.slug}/`} className="btn btn-primary ms-2" type="submit">
+                              View Restaurant <i className="fas fa-shop" />{" "}
+                            </Link>
                           </div>
                         </div>
                       </form>

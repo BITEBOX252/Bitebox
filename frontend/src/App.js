@@ -88,7 +88,7 @@ import AddDish from "./pages/Restaurant/AddDish";
 import UpdateDish from "./pages/Restaurant/UpdateDish";
 import Register from "./pages/Restaurant/Register";
 import RestaurantSettings from "./pages/Restaurant/RestaurantSettings";
-
+import RestaurantStore from "./pages/Restaurant/RestaurantStore";
 
 function App() {
   return (
@@ -118,6 +118,7 @@ function App() {
           <Route path="/restaurant/orders" element={<PrivateRoute element={<Orders />} />} />
           <Route path="/restaurant/add-dish" element={<PrivateRoute element={<AddDish />} />} />
           <Route path="/restaurant/settings" element={<PrivateRoute element={<RestaurantSettings />} />} />
+          <Route path="/restaurant/store/:slug/" element={<PrivateRoute element={<RestaurantStore />} />} />
           <Route path="/restaurant/dish/update/:did" element={<PrivateRoute element={<UpdateDish />} />} />
 
           {/* 404 Error Page */}

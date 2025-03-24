@@ -334,7 +334,7 @@ class RestaurantOwnerProfileUpdateAPIView(generics.RetrieveUpdateAPIView):
 
 
 class RestaurantUpdateAPIView(generics.RetrieveUpdateAPIView):
-    queryset=Profile.objects.all()
+    queryset=Restaurant.objects.all()
     serializer_class=RestaurantSerializer
     permission_classes=[AllowAny]
 
@@ -348,14 +348,15 @@ class RestaurantAPIView(generics.RetrieveUpdateAPIView):
         return Restaurant.objects.get(slug=restaurant_slug)
     
 
-class RestaurantDishAPIView(generics.RetrieveUpdateAPIView):
+class RestaurantDishAPIView(generics.ListAPIView):
     serializer_class=DishSerializer
     permission_classes=[AllowAny]
-
-    def get_object(self):
+    # lookup_field = "slug"
+    # def get_object(self):
+    def get_queryset(self):
         restaurant_slug=self.kwargs['restaurant_slug']
         restaurant=Restaurant.objects.get(slug=restaurant_slug)
-
+        
         return Dish.objects.filter(restaurant=restaurant)
 
 
