@@ -22,7 +22,8 @@ const DishDetail = () => {
     const [portionSizeValue,setPortionSizeValue]= useState("No portion size")
     const [qtyValue,setQtyValue]= useState(1)
     const [priceByPortionSize,setPriceByPortionSize]= useState(0)
-
+    const [restaurant, setRestaurant] = useState([])
+    const [restaurantUser, setRestaurantUser] = useState([])
 
     const CartId= CartID()
     let { access_token } = getToken();
@@ -52,7 +53,8 @@ const DishDetail = () => {
         setGallery(res.data?.gallery)
         setSpiceLevel(res.data?.spice_level)
         setPortionSize(res.data?.portion_size)
-            
+        setRestaurant(res.data.restaurant);
+        setRestaurantUser(res.data.restaurant.name);
         })
     },[])
     console.log(spiceLevel);
@@ -363,7 +365,7 @@ const DishDetail = () => {
                     <div className="row g-0">
                         <div className="col-md-4">
                             <img
-                                src="https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
+                                src={restaurant.image}
                                 style={{
                                     height: "100%",
                                     width: "100%",
@@ -375,8 +377,8 @@ const DishDetail = () => {
                         </div>
                         <div className="col-md-8">
                             <div className="card-body">
-                                <h5 className="card-title">John Doe</h5>
-                                <p className="card-text">Frontend Developer</p>
+                                <h5 className="card-title">{restaurantUser}</h5>
+                                <p className="card-text">{restaurant.description}</p>
                             </div>
                         </div>
                     </div>

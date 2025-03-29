@@ -109,8 +109,9 @@ class CartAPIView(generics.ListCreateAPIView):
             tax_rate=tax.rate / 100
         else:
             tax_rate=0
-        cart=Cart.objects.filter(cart_id=cart_id,dish=dish,portion_size=portion_size,           # Added size
- spice_level=spice_level ).first()
+        cart=Cart.objects.filter(cart_id=cart_id,dish=dish ).first()
+#         cart=Cart.objects.filter(cart_id=cart_id,dish=dish,portion_size=portion_size,           # Added size
+#  spice_level=spice_level ).first()
         if cart:
             cart.dish=dish
             cart.user=user
