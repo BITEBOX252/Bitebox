@@ -22,6 +22,7 @@ const DishDetail = () => {
     const [portionSizeValue,setPortionSizeValue]= useState("No portion size")
     const [qtyValue,setQtyValue]= useState(1)
     const [priceByPortionSize,setPriceByPortionSize]= useState(0)
+
     const [restaurant, setRestaurant] = useState([])
     const [restaurantUser, setRestaurantUser] = useState([])
 
@@ -118,7 +119,7 @@ const DishDetail = () => {
         formdata.append("dish_id",product.id)
         formdata.append("user_id",data?.id)
         formdata.append("qty",qtyValue)
-        formdata.append("price",product.price)
+        formdata.append("price",priceByPortionSize)
         formdata.append("shipping_amount",product.shipping_amount)
         // formdata.append("country",currAddress.country)
         formdata.append("country","undefined")
