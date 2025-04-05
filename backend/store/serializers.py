@@ -53,9 +53,12 @@ class DishSerializer(serializers.ModelSerializer):
             
 
 class CartSerializer(serializers.ModelSerializer):
+    price_by_portion_size = serializers.SerializerMethodField()
     class Meta:
         model=Cart
         fields="__all__"
+    def get_price_by_portion_size(self, obj):
+        return obj.price_by_portion_size()
 
     def __init__(self,*args, **kwargs):
         super(CartSerializer,self).__init__(*args, **kwargs)

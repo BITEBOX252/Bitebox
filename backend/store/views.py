@@ -83,7 +83,7 @@ class CartAPIView(generics.ListCreateAPIView):
         user_id=payload['user_id']
         qty=payload['qty']
         price=payload['price']
-        # print(type(price))
+        print(type(price))
         
         shipping_amount=payload['shipping_amount']
         country=payload['country']
@@ -91,10 +91,12 @@ class CartAPIView(generics.ListCreateAPIView):
             country ="Pakistan"
         portion_size=payload['portionSize']
         print("size=============="+portion_size)
-        if portion_size!="No size":
+        if portion_size!="No portion size":
             portion_size_price=portion_size_obj.get_price_by_portion(portion_size)
+            print(portion_size_price)
             print("size==============",portion_size_price)
             price= Decimal(price)+portion_size_price
+            print(price)
             print(type(portion_size_price))
         spice_level=payload['spiceLevel']
         cart_id=payload['cart_id']

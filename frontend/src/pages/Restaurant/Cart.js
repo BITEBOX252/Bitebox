@@ -10,10 +10,19 @@ import { useDispatch } from "react-redux";
 
 function Cart() {
   const [cart, setCart] = useState([]);
+  const [dishQty, setDishQty] = useState([]);
+  const [cartTotal, setCartTotal] = useState([]);
+  const [c, setC] = useState({
+    qty: 1,
+  });
   const dispatch = useDispatch();
   const CartId = CartID();
   let { access_token } = getToken();
   const { data, isSuccess } = useGetLoggedUserQuery(access_token);
+  const [fullName, setFullName] = useState("")
+  const [mobile, setMobile] = useState("")
+      const [address, setAddress] = useState("")
+      const [city, setCity] = useState("")
 
   const fetchCartData = (cart_id, user_id) => {
     const url = user_id ? `http://127.0.0.1:8000/api/store/cart-list/${cart_id}/${user_id}/` : `http://127.0.0.1:8000/api/store/cart-list/${cart_id}/`;
@@ -25,12 +34,24 @@ function Cart() {
       .catch((error) => console.error("Error fetching cart data:", error));
   };
 
+  const fetchCartTotalData = (cart_id, user_id) => {
+    const url = user_id ? `http://127.0.0.1:8000/api/store/cart-detail/${cart_id}/${user_id}/` : `http://127.0.0.1:8000/api/store/cart-detail/${cart_id}/`;
+    axios.get(url)
+      .then((res) => {
+        console.log(res);
+        setCartTotal(res?.data);
+      })
+      .catch((error) => console.error("Error fetching cart data:", error));
+  };
+
   useEffect(() => {
     if (CartId) {
       if (data) {
         fetchCartData(CartId, data?.id);
+        fetchCartTotalData(CartId, data?.id);
       } else {
         fetchCartData(CartId, null);
+        fetchCartTotalData(CartId, null);
       }
     }
 
@@ -40,8 +61,77 @@ function Cart() {
       dispatch(setUserInfo({ email: data.email, name: data.name }));
     }
     console.log("Access Token is this", data);
-  }, [CartId, data, isSuccess, access_token, dispatch]);
+  }, []);
+  
+  const handleQtyChange=(e,dish_id)=>{
+    const qty=e.target.value;
+    console.log(qty);
+    console.log(dish_id);
+    setDishQty((prevqty)=>({
+      ...prevqty,
+      [dish_id]:qty
+    }))
+  }
+ useEffect(()=>{
+  const initialqty={}
+  cart.forEach((c)=>{
+    initialqty[c.dish?.id]=c.qty
+  })
+  setDishQty(initialqty)
+ },[cart])
 
+const updateCart= async(dish_id,price,shipping_amount,portion,spice)=>{
+  const qtyValue=dishQty[dish_id]
+  console.log(qtyValue);
+  const formdata=new FormData()
+        formdata.append("dish_id",dish_id)
+        formdata.append("user_id",data?.id)
+        formdata.append("qty",qtyValue)
+        formdata.append("price",price)
+        formdata.append("shipping_amount",shipping_amount)
+        // formdata.append("country",currAddress.country)
+        formdata.append("portionSize",portion)
+        formdata.append("spiceLevel",spice)
+        formdata.append("country","undefined")
+        formdata.append("cart_id",CartId)
+
+        const response= await axios.post(`http://127.0.0.1:8000/api/store/cart/`,formdata)
+        console.log(response);
+        fetchCartData(CartId, data?.id);
+        fetchCartTotalData(CartId, data?.id);
+        
+  
+}
+const handleDeleteCartItem= async (itemId)=>{
+  const url=data?.id 
+  ? `http://127.0.0.1:8000/api/store/cart-delete/${CartId}/${data?.id}/${itemId}/`
+  :`http://127.0.0.1:8000/api/store/cart-delete/${CartId}/${itemId}/`
+  await axios.delete(url)
+  fetchCartData(CartId, data?.id);
+  fetchCartTotalData(CartId, data?.id);
+}
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  // Use computed property names to dynamically set the state based on input name
+  switch (name) {
+      case 'fullName':
+          setFullName(value);
+          break;
+      
+      case 'mobile':
+          setMobile(value);
+          break;
+      case 'address':
+          setAddress(value);
+          break;
+      case 'city':
+          setCity(value);
+          break;
+      default:
+          break;
+  }
+};
   return (<div>
     <div>
   <main className="mt-5">
@@ -52,8 +142,9 @@ function Cart() {
             <div className="row gx-lg-5 mb-5">
               <div className="col-lg-8 mb-4 mb-md-0">
                 <section className="mb-5">
+                {cart?.map((c,index)=>(
 
-                  <div className="row border-bottom mb-4">
+                  <div className="row border-bottom mb-4" key={index}>
                     <div className="col-md-2 mb-4 mb-md-0">
                       <div
                         className="bg-image ripple rounded-5 mb-4 overflow-hidden d-block"
@@ -61,7 +152,7 @@ function Cart() {
                       >
                         <a to=''>
                           <img
-                            src="https://www.eclosio.ong/wp-content/uploads/2018/08/default.png"
+                            src={c.dish.image}
                             className="w-100"
                             alt=""
                             style={{ height: "100px", objectFit: "cover", borderRadius: "10px" }}
@@ -80,56 +171,86 @@ function Cart() {
                       </div>
                     </div>
                     <div className="col-md-8 mb-4 mb-md-0">
-                      <a to={null} className="fw-bold text-dark mb-4">Product Title</a>
+                      <a to={null} className="fw-bold text-dark mb-4">{c.dish.title}</a>
+                      {c.portion_size!=="No portion size" &&
                       <p className="mb-0">
-                        <span className="text-muted me-2">Size:</span>
-                        <span>XXL</span>
+                        <span className="text-muted me-2">Portion Size:</span>
+                        <span>{c.portion_size}</span>
                       </p>
-                      <p className='mb-0'>
-                        <span className="text-muted me-2">Color:</span>
-                        <span>Pink</span>
-                      </p>
+                      }
+                      { c.spice_level!=="No spice level" &&
+                        <p className='mb-0'>
+                        <span className="text-muted me-2">Spice Level:</span>
+                        <span>{c.spice_level}</span>
+                      </p>}
+                      
                       <p className='mb-0'>
                         <span className="text-muted me-2">Price:</span>
-                        <span>$20.00</span>
+                      
+                        <span>
+  ${c.price_by_portion_size !== null 
+    ? ((parseFloat(c.dish.price) || 0) + (parseFloat(c.price_by_portion_size) || 0)
+  ).toFixed(2) 
+    : c.dish.price }
+</span>
+
+                        
                       </p>
-                      <p className='mb-0'>
+                      {/* <p className='mb-0'>
                         <span className="text-muted me-2">Stock Qty:</span>
                         <span>3</span>
-                      </p>
+                      </p> */}
                       <p className='mb-0'>
                         <span className="text-muted me-2">Vendor:</span>
-                        <span>Desphixs</span>
+                        <span>{c.dish?.restaurant.name}</span>
                       </p>
                       <p className="mt-3">
-                        <button className="btn btn-danger ">
+                        <button onClick={()=>handleDeleteCartItem(c.id)} className="btn btn-danger ">
                           <small><i className="fas fa-trash me-2" />Remove</small>
                         </button>
                       </p>
                     </div>
                     <div className="col-md-2 mb-4 mb-md-0">
                       <div className="d-flex justify-content-center align-items-center">
-                        <div className="form-outline">
+                        <div className="form-outline" >
                           <input
                             type="number"
                             className="form-control"
-                            value={1}
+                            style={{ width: '80px' }}
+                            value={dishQty[c.dish?.id] || c.qty}
                             min={1}
+                            onChange={(e) => {
+                              // Assuming you're updating quantity in state
+                              const updatedQty = parseInt(e.target.value, 10);
+                              setC((prev) => ({ ...prev, qty: updatedQty }));
+                              handleQtyChange(e,c.dish.id)
+                            }}
 
                           />
                         </div>
-                        <button className='ms-2 btn btn-primary'><i className='fas fa-rotate-right'></i></button>
+                        <button onClick={()=>updateCart(c.dish.id,c.dish.price,c.shipping_amount,c.portion_size
+,c.spice_level
+)} className='ms-2 btn btn-primary'><i className='fas fa-rotate-right'></i></button>
                       </div>
-                      <h5 className="mb-2 mt-3 text-center"><span className="align-middle">$100.00</span></h5>
+                      {/* <h5 className="mb-2 mt-3 text-center"><span className="align-middle">${(c.price_by_portion_size !== null 
+    ? ((parseFloat(c.dish.price) || 0) + (parseFloat(c.price_by_portion_size) || 0)
+  ).toFixed(2) 
+    : c.dish.price) * c.qty}</span></h5> */}
+    <h5 className="mb-2 mt-3 text-center">${c.sub_total}<span></span></h5>
                     </div>
                   </div>
-
+                ))}
+                  {cart.length <1 &&
+                  
                   <>
                     <h5>Your Cart Is Empty</h5>
                     <a to='/'> <i className='fas fa-shopping-cart'></i> Continue Shopping</a>
                   </>
+                  }
 
                 </section>
+                {cart.length>0 &&
+                
                 <div>
                   <h5 className="mb-4 mt-4">Personal Information</h5>
                   {/* 2 column grid layout with text inputs for the first and last names */}
@@ -140,7 +261,9 @@ function Cart() {
                         <input
                           type="text"
                           id=""
+                          onChange={handleChange}
                           name='fullName'
+                          value={fullName}
                           className="form-control"
                         />
                       </div>
@@ -157,6 +280,8 @@ function Cart() {
                           type="text"
                           id="form6Example1"
                           className="form-control"
+                          onChange={handleChange}
+                          value={mobile}
                           name='mobile'
                         />
                       </div>
@@ -173,6 +298,8 @@ function Cart() {
                           type="text"
                           id="form6Example1"
                           className="form-control"
+                          onChange={handleChange}
+                          value={address}
                           name='address'
                         />
                       </div>
@@ -184,6 +311,8 @@ function Cart() {
                           type="text"
                           id="form6Example1"
                           className="form-control"
+                          onChange={handleChange}
+                          value={city}
                           name='city'
                         />
                       </div>
@@ -192,6 +321,7 @@ function Cart() {
                     
                   </div>
                 </div>
+                }
               </div>
               <div className="col-lg-4 mb-4 mb-md-0">
                 {/* Section: Summary */}
@@ -199,24 +329,24 @@ function Cart() {
                   <h5 className="mb-3">Cart Summary</h5>
                   <div className="d-flex justify-content-between mb-3">
                     <span>Subtotal </span>
-                    <span>$10.00</span>
+                    <span>${cartTotal.subtotal}</span>
                   </div>
                   <div className="d-flex justify-content-between">
                     <span>Shipping </span>
-                    <span>$10.00</span>
+                    <span>${cartTotal.shipping}</span>
                   </div>
                   <div className="d-flex justify-content-between">
                     <span>Tax </span>
-                    <span>$10.00</span>
+                    <span>${cartTotal.tax}</span>
                   </div>
                   <div className="d-flex justify-content-between">
                     <span>Servive Fee </span>
-                    <span>$10.00</span>
+                    <span>${cartTotal.service_fee}</span>
                   </div>
                   <hr className="my-4" />
                   <div className="d-flex justify-content-between fw-bold mb-5">
                     <span>Total </span>
-                    <span>$10.00</span>
+                    <span>${cartTotal.total}</span>
                   </div>
                   <button className="btn btn-primary btn-rounded w-100" >
                     Got to checkout

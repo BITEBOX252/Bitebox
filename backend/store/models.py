@@ -164,6 +164,9 @@ class Cart(models.Model):
         return f"{self.cart_id}-{self.dish.title}"
     class Meta:
         ordering=['-id']
+    def price_by_portion_size(self):
+        portion = PortionSize.objects.filter(size_name=self.portion_size).first()
+        return portion.price if portion else None
 
 
 
