@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import CartID from "../plugins/CartID";
 import { getToken } from "../../services/LocalStorageService";
 import { useGetLoggedUserQuery } from "../../services/userAuthApi";
@@ -43,7 +43,7 @@ function Cart() {
       })
       .catch((error) => console.error("Error fetching cart data:", error));
   };
-
+  const navigate=useNavigate()
   useEffect(() => {
     if (CartId) {
       if (data) {
@@ -132,6 +132,41 @@ const handleChange = (e) => {
           break;
   }
 };
+const createCartOrder = async () => {
+
+        if (!fullName ||  !mobile || !address || !city ) {
+            // If any required field is missing, show an error message or take appropriate action
+            console.log("Please fill in all required fields");
+            // Swal.fire({
+            //     icon: 'warning',
+            //     title: 'Missing Fields!',
+            //     text: "All fields are required before checkout",
+            // })
+            return;
+        }
+
+        try {
+
+            const formData = new FormData();
+            formData.append('full_name', fullName);
+            formData.append('mobile', mobile);
+            formData.append('address', address);
+            formData.append('city', city);
+            // formData.append('state', state);
+            // formData.append('country', country);
+            formData.append('cart_id', CartId);
+            formData.append('user_id', data? data.id : 0);
+
+            const response = await axios.post('http://127.0.0.1:8000/api/store/create-order/', formData)
+            console.log(response.data);
+           
+
+            navigate(`/checkout/${response.data.Order_Id}`);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
   return (<div>
     <div>
   <main className="mt-5">
@@ -348,7 +383,7 @@ const handleChange = (e) => {
                     <span>Total </span>
                     <span>${cartTotal.total}</span>
                   </div>
-                  <button className="btn btn-primary btn-rounded w-100" >
+                  <button onClick={createCartOrder} className="btn btn-primary btn-rounded w-100" >
                     Got to checkout
                   </button>
                 </section>

@@ -82,6 +82,7 @@ class CartAPIView(generics.ListCreateAPIView):
         dish_id=payload['dish_id']
         user_id=payload['user_id']
         qty=payload['qty']
+        print()
         price=payload['price']
         print(type(price))
         
@@ -253,12 +254,9 @@ class createOrderAPIView(generics.CreateAPIView):
     def create(self,request):
         payload=request.data
         full_name=payload['full_name']
-        email=payload['email']
         mobile=payload['mobile']
         address=payload['address']
         city=payload['city']
-        state=payload['state']
-        country=payload['country']
         cart_id=payload['cart_id']
         user_id=payload['user_id']
         try:
@@ -276,12 +274,9 @@ class createOrderAPIView(generics.CreateAPIView):
         order=CartOrder.objects.create(
             buyer=user,
             full_name=full_name,
-            email=email,
             mobile=mobile,
             address=address,
             city=city,
-            state=state,
-            country=country,
         )
         for c in cart_items:
             CartOrderItem.objects.create(

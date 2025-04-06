@@ -89,6 +89,7 @@ import UpdateDish from "./pages/Restaurant/UpdateDish";
 import Register from "./pages/Restaurant/Register";
 import RestaurantSettings from "./pages/Restaurant/RestaurantSettings";
 import RestaurantStore from "./pages/Restaurant/RestaurantStore";
+import Checkout from "./pages/Restaurant/Checkout";
 
 function App() {
   const { access_token } = useSelector(state => state.auth);
@@ -115,24 +116,18 @@ function App() {
           <Route path="/dashboard" element={access_token ? <Dashboard /> : <Navigate to="/login" />} />
           {/* <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} /> */}
           <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
-
-//           <Route path="/dashboard" element={access_token ? <Dashboard /> : <Navigate to="/login" />} />
+          <Route path="/checkout/:order_oid/" element={<PrivateRoute element={<Checkout />} />} />
+         <Route path="/dashboard" element={access_token ? <Dashboard /> : <Navigate to="/login" />} />
+        
 
 
           {/* Vendor Protected Routes */}
-          {/* <Route path="/restaurant/dashboard" element={access_token ?<RestaurantDashboard />: <Navigate to="/login" />} /> */}
           <Route path="/restaurant/dashboard" element={<PrivateRoute element={<RestaurantDashboard />} />} />
-          {/* <Route path="/restaurant/dishes" element={access_token ?<Dish />: <Navigate to="/login" />} /> */}
           <Route path="/restaurant/dishes" element={<PrivateRoute element={<Dish />} />} />
-          {/* <Route path="/restaurant/orders" element={access_token ?<Orders />: <Navigate to="/login" />} /> */}
           <Route path="/restaurant/orders" element={<PrivateRoute element={<Orders />} />} />
-          {/* <Route path="/restaurant/add-dish" element={access_token ?<AddDish />: <Navigate to="/login" />} /> */}
           <Route path="/restaurant/add-dish" element={<PrivateRoute element={<AddDish />} />} />
-          {/* <Route path="/restaurant/settings" element={access_token ?<RestaurantSettings />: <Navigate to="/login" />} /> */}
           <Route path="/restaurant/settings" element={<PrivateRoute element={<RestaurantSettings />} />} />
-          {/* <Route path="/restaurant/store/:slug/" element={access_token ?<RestaurantStore />: <Navigate to="/login" />} /> */}
           <Route path="/restaurant/store/:slug/" element={<PrivateRoute element={<RestaurantStore />} />} />
-          {/* <Route path="/restaurant/dish/update/:did" element={access_token ?<UpdateDish />: <Navigate to="/login" />} /> */}
           <Route path="/restaurant/dish/update/:did" element={<PrivateRoute element={<UpdateDish />} />} />
 
           {/* 404 Error Page */}
