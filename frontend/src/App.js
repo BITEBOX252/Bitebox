@@ -90,13 +90,37 @@ import Register from "./pages/Restaurant/Register";
 import RestaurantSettings from "./pages/Restaurant/RestaurantSettings";
 import RestaurantStore from "./pages/Restaurant/RestaurantStore";
 import Checkout from "./pages/Restaurant/Checkout";
+import Search from "./pages/Restaurant/Search";
+import { cartContext } from "./pages/plugins/Context";
+import { useState,useEffect } from "react";
+import CartID from "./pages/plugins/CartID"
+import { getToken } from "./services/LocalStorageService";
+import { useGetLoggedUserQuery } from "./services/userAuthApi";
+import axios from "axios";
 
 function App() {
   const { access_token } = useSelector(state => state.auth);
+  const CartId = CartID();
+    // let { access_token } = getToken();
+    const { data, isSuccess } = useGetLoggedUserQuery(access_token);
 //   console.log("Access Token", access_token);
+const [count,setCount]=useState(0)
+const [cartCount,setCartCount]=useState()
+
+useEffect(()=>{
+  const url = data ? `http://127.0.0.1:8000/api/store/cart-list/${CartId}/${data.id}/` : `http://127.0.0.1:8000/api/store/cart-list/${CartId}/`;
+    axios.get(url)
+      .then((res) => {
+        console.log(res);
+        setCartCount(res?.data.length);
+      })
+      .catch((error) => console.error("Error fetching cart data:", error));
+})
   
   return (
     <>
+    <cartContext.Provider value={[cartCount,setCartCount]}>
+
       <BrowserRouter>
         <Navbar/>
         <Routes>
@@ -111,6 +135,7 @@ function App() {
           <Route path="/restaurant-register" element={<Register />} />
           <Route path="/detail/:id" element={<RestaurantDetail />} />
           <Route path="/dishdetail/:slug" element={<DishDetail />} />
+          <Route path="/search/" element={<Search />} />
 
           {/* Protected Routes */}
           <Route path="/dashboard" element={access_token ? <Dashboard /> : <Navigate to="/login" />} />
@@ -135,6 +160,7 @@ function App() {
         </Routes>
         <Footer/>
       </BrowserRouter>
+    </cartContext.Provider>
     </>
   );
 }

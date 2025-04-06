@@ -1,13 +1,11 @@
-// import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
-import { NavLink,Link } from 'react-router-dom';
+import { NavLink,Link,useNavigate} from 'react-router-dom';
 import { getToken,removeToken } from '../services/LocalStorageService';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { unSetUserToken } from '../features/authSlice';
 import { setUserInfo } from '../features/userSlice';
-import { useNavigate } from 'react-router-dom';
 import { useGetLoggedUserQuery } from '../services/userAuthApi';
-import { useSelector } from "react-redux";
-
+import { useState,useContext } from 'react';
+import { cartContext } from '../pages/plugins/Context';
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -15,14 +13,25 @@ const Navbar = () => {
   const dispatch=useDispatch()
   const {data,isSuccess} = useGetLoggedUserQuery(access_token)
   const { access_token1 } = useSelector(state => state.auth);
-  
-  
+  const [search,setSearch]=useState("")
+  const cartCount=useContext(cartContext)
   const handleLogout = () => {
     console.log("Logout Clicked");
     dispatch(unSetUserToken({access_token: null}))
     dispatch(setUserInfo({email:"",name:""}))
     removeToken()
     navigate('/login')
+  }
+
+  const handleSearchChange =(event)=>{
+    setSearch(event.target.value)
+    console.log(search);
+    
+  }
+
+  const handleSearchSubmit =()=>{
+    navigate(`/search?query=${search}`)
+    
   }
   return (
     
@@ -192,17 +201,18 @@ const Navbar = () => {
             </ul>
             <div className="d-flex">
               <input
-                onChange={null}
+                onChange={handleSearchChange}
                 name="search"
                 className="form-control me-2"
                 type="text"
                 placeholder="Search"
                 aria-label="Search"
+
               />
               <button
-                onClick={null}
+                onClick={handleSearchSubmit}
                 className="btn btn-outline-success me-2"
-                type="submit"
+                type="button"
               >
                 Search
               </button>
@@ -221,7 +231,7 @@ const Navbar = () => {
             <Link className="btn btn-danger" to="/cart/">
               {/* <i className="fas fa-shopping-cart"></i>{" "} */}
               <i className="fas fa-shopping-cart"></i>{" "}
-              <span id="cart-total-items">0</span>
+              <span id="cart-total-items">{cartCount}</span>
             </Link>
           </div>
         </div>

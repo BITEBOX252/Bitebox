@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import CartID from "../plugins/CartID";
 import { getToken } from "../../services/LocalStorageService";
@@ -7,6 +7,7 @@ import { useGetLoggedUserQuery } from "../../services/userAuthApi";
 import { setUserToken } from "../../features/authSlice";
 import { setUserInfo } from "../../features/userSlice";
 import { useDispatch } from "react-redux";
+import { cartContext } from "../plugins/Context";
 
 function Cart() {
   const [cart, setCart] = useState([]);
@@ -15,6 +16,8 @@ function Cart() {
   const [c, setC] = useState({
     qty: 1,
   });
+      const [cartCount,setCartCount] = useContext(cartContext)
+  
   const dispatch = useDispatch();
   const CartId = CartID();
   let { access_token } = getToken();
@@ -30,6 +33,7 @@ function Cart() {
       .then((res) => {
         console.log(res);
         setCart(res?.data);
+        setCartCount(res?.data.length)
       })
       .catch((error) => console.error("Error fetching cart data:", error));
   };
@@ -107,6 +111,13 @@ const handleDeleteCartItem= async (itemId)=>{
   ? `http://127.0.0.1:8000/api/store/cart-delete/${CartId}/${data?.id}/${itemId}/`
   :`http://127.0.0.1:8000/api/store/cart-delete/${CartId}/${itemId}/`
   await axios.delete(url)
+  // const url1 = data ? `http://127.0.0.1:8000/api/store/cart-list/${CartId}/${data.id}/` : `http://127.0.0.1:8000/api/store/cart-list/${CartId}/`;
+  //         const res= await axios.get(url1)
+  //         .then((res) => {
+  //             console.log("response ======",res.data);
+  //             setCartCount(res?.data.length);
+  //           })
+  //           .catch((error) => console.error("Error fetching cart data:", error));
   fetchCartData(CartId, data?.id);
   fetchCartTotalData(CartId, data?.id);
 }
@@ -387,13 +398,7 @@ const createCartOrder = async () => {
                     Got to checkout
                   </button>
                 </section>
-                <section className="shadow rounded-3 card p-4 rounded-5">
-                              <h5 className="mb-4">Apply Coupon Code</h5>
-                              <div className="d-flex align-items-center">
-                                <input type="text" className="form-control rounded me-1" placeholder="Coupon Code" />
-                                <button type="button" className="btn btn-success btn-rounded overflow-visible" >Apply</button>
-                              </div>
-                </section>
+                
               </div>
             </div>
           </section>

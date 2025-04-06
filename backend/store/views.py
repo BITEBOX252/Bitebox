@@ -322,6 +322,17 @@ class checkoutAPIView(generics.RetrieveAPIView):
         print(order_oid)
         order=CartOrder.objects.get(oid=order_oid)
         print(order)
-        return order                
+        return order   
+
+class SearchDishAPIView(generics.ListCreateAPIView):
+    serializer_class=DishSerializer
+    permission_classes=[AllowAny]
+
+    def get_queryset(self):
+        query=self.request.GET.get("query")
+        print(query)
+        dishes=Dish.objects.filter(status="published",title__icontains=query) 
+        print(dishes)  
+        return dishes              
 
         

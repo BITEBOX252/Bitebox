@@ -1,13 +1,13 @@
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useContext} from 'react'
 import CartID from '../plugins/CartID'
 import { getToken } from '../../services/LocalStorageService'
 import { useGetLoggedUserQuery } from '../../services/userAuthApi'
 import { setUserToken } from '../../features/authSlice'
 import { setUserInfo } from '../../features/userSlice'
 import { useDispatch } from 'react-redux';
-
+import { cartContext } from '../plugins/Context'
 
 const DishDetail = () => {
     const dispatch = useDispatch();
@@ -25,6 +25,7 @@ const DishDetail = () => {
 
     const [restaurant, setRestaurant] = useState([])
     const [restaurantUser, setRestaurantUser] = useState([])
+    const [cartCount,setCartCount] = useContext(cartContext)
 
     const CartId= CartID()
     let { access_token } = getToken();
@@ -129,6 +130,17 @@ const DishDetail = () => {
 
         const response= await axios.post(`http://127.0.0.1:8000/api/store/cart/`,formdata)
         console.log(response);
+        const url = data ? `http://127.0.0.1:8000/api/store/cart-list/${CartId}/${data.id}/` : `http://127.0.0.1:8000/api/store/cart-list/${CartId}/`;
+        const res= await axios.get(url)
+        .then((res) => {
+            console.log("response ======",res.data);
+            setCartCount(res?.data.length);
+          })
+          .catch((error) => console.error("Error fetching cart data:", error));
+        
+        
+        // setCartCount(res?.data.length);
+              
 
         } catch (error) {
             console.log(error);
