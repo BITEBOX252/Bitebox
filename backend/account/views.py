@@ -5,9 +5,10 @@ from account.serializers import SendPasswordResetEmailSerializer, UserChangePass
 from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
-from .models import User
-from .serializers import UserLocationSerializer
+from .models import User,Profile
+from .serializers import UserLocationSerializer,ProfileSerializer
+from rest_framework import generics 
+from rest_framework.permissions import AllowAny,IsAuthenticated 
 # Generate Token Manually
 def get_tokens_for_user(user):
   refresh = RefreshToken.for_user(user)
@@ -109,3 +110,16 @@ class UserPasswordResetView(APIView):
     return Response({'msg':'Password Reset Successfully'}, status=status.HTTP_200_OK)
 
 
+
+
+class ProfileView(generics.RetrieveAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ProfileSerializer
+
+    def get_object(self):
+        user_id = self.kwargs['user_id']
+
+        user = User.objects.get(id=user_id)
+        profile = Profile.objects.get(user=user)
+        return profile
+    

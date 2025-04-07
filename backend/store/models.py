@@ -300,8 +300,8 @@ class Wishlist(models.Model):
         return self.dish.title
 
 class Notification(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
-    restaurant=models.ForeignKey(Restaurant,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
+    restaurant=models.ForeignKey(Restaurant,on_delete=models.SET_NULL,null=True,blank=True)
     order=models.ForeignKey(CartOrder,on_delete=models.SET_NULL,null=True,blank=True)
     order_item=models.ForeignKey(CartOrderItem,on_delete=models.SET_NULL,null=True,blank=True)
     seen=models.BooleanField(default=False)

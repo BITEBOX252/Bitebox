@@ -97,6 +97,12 @@ import CartID from "./pages/plugins/CartID"
 import { getToken } from "./services/LocalStorageService";
 import { useGetLoggedUserQuery } from "./services/userAuthApi";
 import axios from "axios";
+import Account from "./pages/Customer/Account";
+import COrders from "./pages/Customer/COrders";
+import COrderDetail from "./pages/Customer/COrderDetail";
+import CNotifications from "./pages/Customer/CNotifications";
+import Settings from "./pages/Customer/Settings";
+import Notifications from "./pages/Restaurant/Notifications";
 
 function App() {
   const { access_token } = useSelector(state => state.auth);
@@ -149,11 +155,22 @@ useEffect(()=>{
           {/* Vendor Protected Routes */}
           <Route path="/restaurant/dashboard" element={<PrivateRoute element={<RestaurantDashboard />} />} />
           <Route path="/restaurant/dishes" element={<PrivateRoute element={<Dish />} />} />
-          <Route path="/restaurant/orders" element={<PrivateRoute element={<Orders />} />} />
+          <Route path="/restaurant/dishes" element={<PrivateRoute element={<Dish />} />} />
+          <Route path="/restaurant/notifications/" element={<PrivateRoute element={<Notifications />} />} />
           <Route path="/restaurant/add-dish" element={<PrivateRoute element={<AddDish />} />} />
           <Route path="/restaurant/settings" element={<PrivateRoute element={<RestaurantSettings />} />} />
           <Route path="/restaurant/store/:slug/" element={<PrivateRoute element={<RestaurantStore />} />} />
           <Route path="/restaurant/dish/update/:did" element={<PrivateRoute element={<UpdateDish />} />} />
+
+
+          <Route path="/customer/account/" element={<PrivateRoute element={<Account />} />} />
+          <Route path="/customer/settings/" element={<PrivateRoute element={<Settings />} />} />
+          <Route path="/customer/orders/" element={<PrivateRoute element={<COrders />} />} />
+          <Route path="/customer/notifications/" element={<PrivateRoute element={<CNotifications />} />} />
+          <Route path="/customer/orders/:order_oid/" element={<PrivateRoute element={<COrderDetail />} />} />
+
+
+
 
           {/* 404 Error Page */}
           <Route path="*" element={<h1>Error 404 - Page Not Found!</h1>} />

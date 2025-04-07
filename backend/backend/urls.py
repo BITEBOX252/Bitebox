@@ -8,6 +8,7 @@ urlpatterns = [
     path('api/restaurant/', include('restaurants.urls')),
     path('auth/', include('rest_framework.urls')),
     path('api/store/', include('store.urls')),
+    path('api/customer/', include('customers.urls')),
 
 ]
 if settings.DEBUG:

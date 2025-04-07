@@ -16,8 +16,10 @@ function RestaurantSettings() {
       let { access_token } = getToken();
         const {data,isSuccess} = useGetLoggedUserQuery(access_token)
       const fetchProfileData = async () => {
+        if (data?.id) {
+          
           try {
-              axios.get(`http://127.0.0.1:8000/api/restaurant/profile-update/${data.id}/`).then((res) => {
+              axios.get(`http://127.0.0.1:8000/api/restaurant/profile-update/${data?.id}/`).then((res) => {
               setProfileData(res.data)
             console.log(res.data);
         //     setProfileData({
@@ -36,10 +38,13 @@ function RestaurantSettings() {
         } catch (error) {
           console.error('Error fetching profile data:', error);
         }
+        }
       };
       const fetchRestaurantData = async () => {
+        if (data?.id) {
+          
           try {
-              axios.get(`http://127.0.0.1:8000/api/restaurant/settings-update/${data.id}/`).then((res) => {
+              axios.get(`http://127.0.0.1:8000/api/restaurant/settings-update/${data?.restaurant_id}/`).then((res) => {
               setRestaurantData(res.data)
             console.log(res.data);
         //     setProfileData({
@@ -58,12 +63,13 @@ function RestaurantSettings() {
         } catch (error) {
           console.error('Error fetching profile data:', error);
         }
+        }
       };
       useEffect(() => {
         fetchProfileData();
         fetchRestaurantData();
         
-      }, [])
+      }, [data?.id])
       const handleInputChange = (event) => {
         setProfileData({
           ...profileData,
@@ -95,8 +101,9 @@ function RestaurantSettings() {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         // setLoading(true)
-    
-        const res = await  axios.get(`http://127.0.0.1:8000/api/restaurant/profile-update/${data.id}/`);
+        if (data?.id) {
+          
+          const res = await  axios.get(`http://127.0.0.1:8000/api/restaurant/profile-update/${data.id}/`);
     
         const formData = new FormData();
         if (profileData.image && profileData.image !== res.data.image) {
@@ -108,25 +115,28 @@ function RestaurantSettings() {
         // formData.append('city', profileData.city);
         // formData.append('state', profileData.state);
         // formData.append('address', profileData.address);
-    
-        try {
-          axios.patch(`http://127.0.0.1:8000/api/restaurant/profile-update/${data.id}/`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            },
-          });
-          fetchProfileData()
+      
           
-    
-        } catch (error) {
-          console.error('Error updating profile:', error);
+          try {
+            axios.patch(`http://127.0.0.1:8000/api/restaurant/profile-update/${data.id}/`, formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              },
+            });
+            fetchProfileData()
+            
+      
+          } catch (error) {
+            console.error('Error updating profile:', error);
+          }
         }
       };
       const handleRestaurantFormSubmit = async (e) => {
         e.preventDefault();
         // setLoading(true)
-    
-        const res = await  axios.get(`http://127.0.0.1:8000/api/restaurant/settings-update/${data.id}/`);
+        if (data?.id) {
+          
+        const res = await  axios.get(`http://127.0.0.1:8000/api/restaurant/settings-update/${data?.restaurant_id}/`);
     
         const formData = new FormData();
         if (restaurantData.image && restaurantData.image !== res.data.image) {
@@ -137,7 +147,7 @@ function RestaurantSettings() {
         
     
         try {
-          axios.patch(`http://127.0.0.1:8000/api/restaurant/settings-update/${data.id}/`, formData, {
+          axios.patch(`http://127.0.0.1:8000/api/restaurant/settings-update/${data?.restaurant_id}/`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             },
@@ -148,6 +158,8 @@ function RestaurantSettings() {
         } catch (error) {
           console.error('Error updating profile:', error);
         }
+      }
+
       };
       
   return (

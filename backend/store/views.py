@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Dish,Category,Cart,Tax,PortionSize,CartOrder,CartOrderItem
+from .models import Dish,Category,Cart,Tax,PortionSize,CartOrder,CartOrderItem,Notification
 from account.models import User
 from .serializers import DishSerializer,CategorySerializer,CartSerializer,CartOrderSerializer
 from rest_framework import generics 
@@ -9,7 +9,13 @@ from rest_framework.response import Response
 from rest_framework import status
 # Create your views here.
 
-
+def send_notification(user=None, restaurant=None, order=None, order_item=None):
+    Notification.objects.create(
+        user=user,
+        restaurant=restaurant,
+        order=order,
+        order_item=order_item,
+    )
 
 class CategoryListAPIView(generics.ListAPIView):
     queryset=Category.objects.all()
@@ -278,6 +284,10 @@ class createOrderAPIView(generics.CreateAPIView):
             address=address,
             city=city,
         )
+        if order.buyer !=None:
+            send_notification(user=order.buyer,order=order)
+
+        
         for c in cart_items:
             CartOrderItem.objects.create(
                 order=order,
@@ -301,6 +311,11 @@ class createOrderAPIView(generics.CreateAPIView):
             total_initial_total+=Decimal(c.total)
             total_total+=Decimal(c.total)
             order.restaurant.add(c.dish.restaurant)
+        # order = CartOrder.objects.get(oid=order.oid)
+        order_items = CartOrderItem.objects.filter(order=order)
+        print(order_items)
+        for o in order_items:
+            send_notification(restaurant=o.restaurant,order=order,order_item=o)
         order.sub_total=total_sub_total
         order.shipping_amount=total_shipping
         order.service_fee=total_service_fee

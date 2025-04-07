@@ -172,7 +172,7 @@ const createCartOrder = async () => {
             console.log(response.data);
            
 
-            navigate(`/checkout/${response.data.Order_Id}`);
+            // navigate(`/checkout/${response.data.Order_Id}`);
 
         } catch (error) {
             console.log(error);
@@ -397,6 +397,13 @@ const createCartOrder = async () => {
                   <button onClick={createCartOrder} className="btn btn-primary btn-rounded w-100" >
                     Got to checkout
                   </button>
+                </section>
+                <section className="shadow rounded-3 card p-4 rounded-5">
+                              <h5 className="mb-4">Apply Coupon Code</h5>
+                              <div className="d-flex align-items-center">
+                                <input type="text" className="form-control rounded me-1" placeholder="Coupon Code" />
+                                <button type="button" className="btn btn-success btn-rounded overflow-visible" >Apply</button>
+                              </div>
                 </section>
                 
               </div>
