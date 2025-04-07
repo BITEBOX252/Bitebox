@@ -348,7 +348,7 @@ const UserLogin = () => {
             storeToken(res.data.token);
             const { access_token } = getToken();
             dispatch(setUserToken({ access_token }));
-            navigate('/dashboard');
+            navigate('/');
         }
     };
 

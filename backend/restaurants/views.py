@@ -19,7 +19,7 @@ from django.db import transaction
 from rest_framework.decorators import api_view
 from django.db.models.functions import ExtractMonth
 from datetime import datetime, timedelta
-
+from django.db.models import F, Sum, ExpressionWrapper, DecimalField
 
 class RestaurantCreateView(generics.CreateAPIView):
     serializer_class = RestaurantCreateSerializer
@@ -151,13 +151,13 @@ class OrderAPIView(generics.ListAPIView):
     def get_queryset(self):
         restaurant_id=self.kwargs['restaurant_id']
         restaurant=Restaurant.objects.get(id=restaurant_id)
-        return CartOrder.objects.filter(restaurant=restaurant,payment_status='paid').order_by('-id')
+        return CartOrder.objects.filter(restaurant=restaurant).order_by('-id')
 
 class OrderDetailAPIView(generics.RetrieveAPIView):
     serializer_class=CartOrderSerializer
     permission_classes=[AllowAny]
 
-    def get_queryset(self):
+    def get_object(self):
         restaurant_id=self.kwargs['restaurant_id']
         order_id=self.kwargs['order_id']
         restaurant=Restaurant.objects.get(id=restaurant_id)
@@ -554,17 +554,35 @@ class DishUpdateAPIView(generics.RetrieveUpdateAPIView):
 
 class Earning(generics.ListAPIView):
     serializer_class = EarningSummarySerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
-
         restaurant_id = self.kwargs['restaurant_id']
         restaurant = Restaurant.objects.get(id=restaurant_id)
 
+        # Revenue expression: subtotal + shipping, wrapped properly
+        revenue_expr = ExpressionWrapper(
+            F('sub_total') + F('shipping_amount'),
+            output_field=DecimalField()
+        )
+
         one_month_ago = datetime.today() - timedelta(days=28)
-        monthly_revenue = CartOrderItem.objects.filter(restaurant=restaurant, date__gte=one_month_ago).aggregate(
-            total_revenue=models.Sum(models.F('sub_total') + models.F('shipping_amount')))['total_revenue'] or 0
-        total_revenue = CartOrderItem.objects.filter(restaurant=restaurant, order__payment_status="paid").aggregate(
-            total_revenue=models.Sum(models.F('sub_total') + models.F('shipping_amount')))['total_revenue'] or 0
+
+        # Monthly revenue from last 28 days
+        monthly_revenue = CartOrderItem.objects.filter(
+            restaurant=restaurant,
+            date__gte=one_month_ago
+        ).aggregate(
+            total_revenue=Sum(revenue_expr)
+        )['total_revenue'] or 0
+
+        # Total revenue from all paid orders
+        total_revenue = CartOrderItem.objects.filter(
+            restaurant=restaurant,
+            
+        ).aggregate(
+            total_revenue=Sum(revenue_expr)
+        )['total_revenue'] or 0
 
         return [{
             'monthly_revenue': monthly_revenue,
