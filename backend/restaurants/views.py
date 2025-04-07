@@ -6,7 +6,7 @@ from rest_framework import generics,status
 from store.models import Dish,CartOrder,CartOrderItem,Review,Coupon,Notification
 from store.serializers import SummarySerializer,DishSerializer,RestaurantSerializer,NotificationSerializer,NotificationSummarySerializer,CouponSummarySerializer,CouponSerializer,ReviewSerializer, CartOrderSerializer,CartOrderItemSerializer,SpecificationSerializer,SpiceLevelSerializer,PortionSizeSerializer,GallerySerializer
 from .models import Restaurant
-from .serializers import RestaurantCreateSerializer
+from .serializers import EarningSummarySerializer, RestaurantCreateSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from math import radians, sin, cos, sqrt, atan2
@@ -16,6 +16,9 @@ from rest_framework.authentication import TokenAuthentication
 from django.db import models
 from account.serializers import ProfileSerializer
 from django.db import transaction
+from rest_framework.decorators import api_view
+from django.db.models.functions import ExtractMonth
+from datetime import datetime, timedelta
 
 
 class RestaurantCreateView(generics.CreateAPIView):
@@ -263,8 +266,8 @@ class CouponStatAPIView(generics.ListAPIView):
         return Response(serializer.data)
     
 
-class NotificationUnseenAPIView(generics.ListAPIView):
-    serializer_class=CouponSummarySerializer
+class NotificationAPIView(generics.ListAPIView):
+    serializer_class=NotificationSerializer
     permission_classes=[AllowAny]
 
     def get_queryset(self):
@@ -275,7 +278,7 @@ class NotificationUnseenAPIView(generics.ListAPIView):
 
 
 class NotificationseenAPIView(generics.ListAPIView):
-    serializer_class=CouponSummarySerializer
+    serializer_class=NotificationSerializer
     permission_classes=[AllowAny]
 
     def get_queryset(self):
@@ -298,9 +301,9 @@ class NotificationSummaryAPIView(generics.ListAPIView):
         all_notification=Notification.objects.filter(restaurant=restaurant).count()
 
         return[{
-            'unread_notification':unread_notification,
-            'read_notification':read_notification,
-            'all_notification':all_notification,
+            'unread_notifications':unread_notification,
+            'read_notifications':read_notification,
+            'all_notifications':all_notification,
         }]
     
     def list(self,*args, **kwargs):
@@ -320,7 +323,7 @@ class NotificationRestaurantMarkAsSeenAPIView(generics.RetrieveAPIView):
         restaurant=Restaurant.objects.get(id=restaurant_id)
         notification=Notification.objects.get(restaurant=restaurant,id=notification_id)
 
-        notification.seen=True
+        notification.seen = True
         notification.save()
 
         return notification
@@ -546,3 +549,49 @@ class DishUpdateAPIView(generics.RetrieveUpdateAPIView):
             serializer=serializer_class(data=data,many=True,context={'dish_instance':dish_instance})
             serializer.is_valid(raise_exception=True)
             serializer.save(dish=dish_instance)
+
+
+
+class Earning(generics.ListAPIView):
+    serializer_class = EarningSummarySerializer
+
+    def get_queryset(self):
+
+        restaurant_id = self.kwargs['restaurant_id']
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+
+        one_month_ago = datetime.today() - timedelta(days=28)
+        monthly_revenue = CartOrderItem.objects.filter(restaurant=restaurant, date__gte=one_month_ago).aggregate(
+            total_revenue=models.Sum(models.F('sub_total') + models.F('shipping_amount')))['total_revenue'] or 0
+        total_revenue = CartOrderItem.objects.filter(restaurant=restaurant, order__payment_status="paid").aggregate(
+            total_revenue=models.Sum(models.F('sub_total') + models.F('shipping_amount')))['total_revenue'] or 0
+
+        return [{
+            'monthly_revenue': monthly_revenue,
+            'total_revenue': total_revenue,
+        }]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+@api_view(('GET',))
+def MonthlyEarningTracker(request, restaurant_id):
+    restaurant = Restaurant.objects.get(id=restaurant_id)
+    monthly_earning_tracker = (
+        CartOrderItem.objects
+        .filter(restaurant=restaurant)
+        .annotate(
+            month=ExtractMonth("date")
+        )
+        .values("month")
+        .annotate(
+            sales_count=models.Sum("qty"),
+            total_earning=models.Sum(
+                models.F('sub_total') + models.F('shipping_amount'))
+        )
+        .order_by("-month")
+    )
+    return Response(monthly_earning_tracker)

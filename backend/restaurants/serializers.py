@@ -100,3 +100,10 @@ class RestaurantCreateSerializer(serializers.ModelSerializer):
 #         if value <= 0:
 #             raise serializers.ValidationError("Max delivery distance must be greater than 0.")
 #         return value
+
+
+
+class EarningSummarySerializer(serializers.Serializer):
+    monthly_revenue = serializers.DecimalField(max_digits=10, decimal_places=2)
+    total_revenue = serializers.DecimalField(max_digits=10, decimal_places=2)
+

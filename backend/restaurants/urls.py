@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import NearbyRestaurants,CouponStatAPIView,CouponListAPIView,CouponDetailAPIView,ReviewListAPIView,ReviewDetailAPIView,RestaurantCreateView,DashboardStatAPIView,RevenueAPIView,DishAPIView,OrderAPIView,OrderDetailAPIView,NotificationUnseenAPIView,NotificationseenAPIView,NotificationSummaryAPIView,NotificationRestaurantMarkAsSeenAPIView,RestaurantUpdateAPIView,RestaurantOwnerProfileUpdateAPIView,RestaurantAPIView,RestaurantDishAPIView,DishCreateAPIView,DishDeleteAPIView,DishUpdateAPIView
+from .views import NearbyRestaurants,CouponStatAPIView,CouponListAPIView,CouponDetailAPIView,ReviewListAPIView,ReviewDetailAPIView,RestaurantCreateView,DashboardStatAPIView,RevenueAPIView,DishAPIView,OrderAPIView,OrderDetailAPIView,NotificationAPIView,NotificationseenAPIView,NotificationSummaryAPIView,NotificationRestaurantMarkAsSeenAPIView,RestaurantUpdateAPIView,RestaurantOwnerProfileUpdateAPIView,RestaurantAPIView,RestaurantDishAPIView,DishCreateAPIView,DishDeleteAPIView,DishUpdateAPIView,MonthlyEarningTracker,Earning
 urlpatterns = [
 
     path('nearby-restaurants/', NearbyRestaurants.as_view(), name='nearby_restaurants'),
@@ -14,15 +14,17 @@ urlpatterns = [
     path('coupons/<restaurant_id>/', CouponListAPIView.as_view()),
     path('coupon-detail/<restaurant_id>/<coupon_id>/', CouponDetailAPIView.as_view()),
     path('coupon-stats/<restaurant_id>/', CouponStatAPIView.as_view()),
-    path('unseen-notifications/<restaurant_id>/', NotificationUnseenAPIView.as_view()),
+    path('notifications/<restaurant_id>/', NotificationAPIView.as_view()),
     path('seen-notifications/<restaurant_id>/', NotificationseenAPIView.as_view()),
     path('notifications-summary/<restaurant_id>/', NotificationSummaryAPIView.as_view()),
-    path('notifications-mark-as-seen/<restaurant_id>/', NotificationRestaurantMarkAsSeenAPIView.as_view()),
+    path('notifications-mark-as-seen/<restaurant_id>/<notification_id>/', NotificationRestaurantMarkAsSeenAPIView.as_view()),
     path('profile-update/<int:pk>/', RestaurantOwnerProfileUpdateAPIView.as_view()),
     path('settings-update/<int:pk>/', RestaurantUpdateAPIView.as_view()),
     path('shop/<restaurant_slug>/', RestaurantAPIView.as_view()),
     path('dishes-store/<restaurant_slug>/', RestaurantDishAPIView.as_view()),
     path('create-dish/<restaurant_id>/', DishCreateAPIView.as_view()),
+    path('earnings/<restaurant_id>/', Earning.as_view()),
+    path('monthly-earnings/<restaurant_id>/', MonthlyEarningTracker),
     path('delete-dish/<restaurant_id>/<dish_did>/', DishDeleteAPIView.as_view()),
     path('update-dish/<restaurant_id>/<dish_did>/', DishUpdateAPIView.as_view()),
 

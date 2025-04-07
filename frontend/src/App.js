@@ -103,6 +103,7 @@ import COrderDetail from "./pages/Customer/COrderDetail";
 import CNotifications from "./pages/Customer/CNotifications";
 import Settings from "./pages/Customer/Settings";
 import Notifications from "./pages/Restaurant/Notifications";
+import Earnings from "./pages/Restaurant/Earnings";
 
 function App() {
   const { access_token } = useSelector(state => state.auth);
@@ -155,6 +156,7 @@ useEffect(()=>{
           {/* Vendor Protected Routes */}
           <Route path="/restaurant/dashboard" element={<PrivateRoute element={<RestaurantDashboard />} />} />
           <Route path="/restaurant/dishes" element={<PrivateRoute element={<Dish />} />} />
+          <Route path="/restaurant/earnings" element={<PrivateRoute element={<Earnings />} />} />
           <Route path="/restaurant/dishes" element={<PrivateRoute element={<Dish />} />} />
           <Route path="/restaurant/notifications/" element={<PrivateRoute element={<Notifications />} />} />
           <Route path="/restaurant/add-dish" element={<PrivateRoute element={<AddDish />} />} />
