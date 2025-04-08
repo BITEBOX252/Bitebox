@@ -242,11 +242,11 @@ const Register = () => {
                     },
                 });
 
-                setServerSuccess("Vendor created successfully!");
+                setServerSuccess("Restaurant created successfully!");
                 setIsFormVisible(false); // Hide form
 
                 setTimeout(() => {
-                    navigate('/dashboard');
+                    navigate('/restaurant/dashboard');
                 }, 2000);
 
             } catch (error) {
