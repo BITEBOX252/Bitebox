@@ -105,6 +105,8 @@ import Settings from "./pages/Customer/Settings";
 import Notifications from "./pages/Restaurant/Notifications";
 import Earnings from "./pages/Restaurant/Earnings";
 import OrderDetail from "./pages/Restaurant/OrderDetail";
+import CustomerLocationViewer from "./pages/Customer/CustomerLocationViewer";
+import DeliveryLocationSender from "./pages/Restaurant/DeliveryLocationSender";
 
 function App() {
   const { access_token } = useSelector(state => state.auth);
@@ -151,7 +153,8 @@ useEffect(()=>{
           <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
           <Route path="/checkout/:order_oid/" element={<PrivateRoute element={<Checkout />} />} />
          <Route path="/dashboard" element={access_token ? <Dashboard /> : <Navigate to="/login" />} />
-        
+         <Route path="/rider/tracking/:orderId/:trackingToken/" element={<PrivateRoute element={<DeliveryLocationSender />} />} />
+        <Route path="/customer/tracking/:orderId/:trackingToken/" element={<PrivateRoute element={<CustomerLocationViewer />} />} />
 
 
           {/* Vendor Protected Routes */}

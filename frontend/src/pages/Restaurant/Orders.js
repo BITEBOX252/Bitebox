@@ -12,22 +12,46 @@ function Orders() {
     const [orders, setOrders] = useState(null)
 
     useEffect(() => {
+        let intervalId;
+    
         const fetchData = async () => {
-          if (data?.restaurant_id) {
-            
-            try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/restaurant/orders/${data?.restaurant_id}/`)
-                setOrders(response.data);
-                console.log(response.data);
-                
-            } catch (error) {
-                console.error('Error fetching data:', error);
+            if (data?.restaurant_id) {
+                try {
+                    const response = await axios.get(`http://127.0.0.1:8000/api/restaurant/orders/${data.restaurant_id}/`);
+                    setOrders(response.data);
+                    console.log("Orders updated:", response.data);
+                } catch (error) {
+                    console.error('Error fetching orders:', error);
+                }
             }
-          }
         };
-
-        fetchData();
+    
+        if (data?.restaurant_id) {
+            fetchData(); // Initial fetch
+            intervalId = setInterval(fetchData, 60000); // Fetch every 60 seconds
+        }
+    
+        return () => clearInterval(intervalId); // Cleanup interval on unmount
     }, [data?.restaurant_id]);
+    
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //       if (data?.restaurant_id) {
+            
+    //         try {
+    //             const response = await axios.get(`http://127.0.0.1:8000/api/restaurant/orders/${data?.restaurant_id}/`)
+    //             setOrders(response.data);
+    //             console.log(response.data);
+                
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //         }
+    //       }
+    //     };
+
+    //     fetchData();
+    // }, [data?.restaurant_id]);
     
   return (
     <div className="container-fluid" id="main" >
@@ -54,7 +78,34 @@ function Orders() {
                                             <th scope="row">#{o.oid}</th>
                                             <td>{o.full_name}</td>
                                             <td>{o.date}</td>
-                                            <td>{o.order_status}</td>
+                                            {/* <td>{o.order_status}</td> */}
+                                            <td>
+  <select
+    className="form-select"
+    value={o.order_status}
+    onChange={async (e) => {
+      const newStatus = e.target.value;
+      try {
+        await axios.patch(`http://127.0.0.1:8000/api/restaurant/orders/${data.restaurant_id}/${o.oid}/`, {
+          order_status: newStatus
+        });
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.oid === o.oid ? { ...order, order_status: newStatus } : order
+          )
+        );
+      } catch (error) {
+        console.error("Error updating order status:", error);
+      }
+    }}
+  >
+    <option value="pending">Pending</option>
+<option value="fulfilled">Fulfilled</option>
+<option value="cancelled">Canceled</option>
+
+  </select>
+</td>
+
                                             <td>
                                                 <Link to={`/restaurant/orders/${o.oid}/`} className="btn btn-primary mb-1">
                                                     <i className="fas fa-eye" />
