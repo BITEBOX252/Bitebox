@@ -8,6 +8,7 @@ import { setUserToken } from "../../features/authSlice";
 import { setUserInfo } from "../../features/userSlice";
 import { useDispatch } from "react-redux";
 import { cartContext } from "../plugins/Context";
+import Swal from 'sweetalert2'
 
 function Cart() {
   const [cart, setCart] = useState([]);
@@ -148,11 +149,11 @@ const createCartOrder = async () => {
         if (!fullName ||  !mobile || !address || !city ) {
             // If any required field is missing, show an error message or take appropriate action
             console.log("Please fill in all required fields");
-            // Swal.fire({
-            //     icon: 'warning',
-            //     title: 'Missing Fields!',
-            //     text: "All fields are required before checkout",
-            // })
+            Swal.fire({
+                icon: 'warning',
+                title: 'Missing Fields!',
+                text: "All fields are required before creating order",
+            })
             return;
         }
 

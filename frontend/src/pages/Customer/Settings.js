@@ -3,6 +3,8 @@ import Sidebar from './Sidebar'
 import { getToken } from "../../services/LocalStorageService";
 import { useGetLoggedUserQuery } from "../../services/userAuthApi";
 import axios from 'axios';
+import Swal from 'sweetalert2'
+
 function Settings() {
     
     const [profileData, setProfileData] = useState({
@@ -87,7 +89,10 @@ function Settings() {
                     'Content-Type': 'multipart/form-data'
                 },
             });
-            
+            Swal.fire({
+              icon: 'success',
+              title: "Profile updated successfully",
+          })
             setLoading(false)
 
         } catch (error) {

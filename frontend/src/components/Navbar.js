@@ -6,6 +6,16 @@ import { setUserInfo } from '../features/userSlice';
 import { useGetLoggedUserQuery } from '../services/userAuthApi';
 import { useState,useContext } from 'react';
 import { cartContext } from '../pages/plugins/Context';
+import Swal from 'sweetalert2';
+
+
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+});
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -20,6 +30,10 @@ const Navbar = () => {
     dispatch(unSetUserToken({access_token: null}))
     dispatch(setUserInfo({email:"",name:""}))
     removeToken()
+    Toast.fire({
+      icon: 'warning',
+      title: 'Logged out successfully'
+  });
     navigate('/login')
   }
 

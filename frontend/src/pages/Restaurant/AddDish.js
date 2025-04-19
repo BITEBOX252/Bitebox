@@ -4,6 +4,8 @@ import { useGetLoggedUserQuery } from '../../services/userAuthApi'
 import { getToken } from '../../services/LocalStorageService'
 import Sidebar from './Sidebar';
 import axios from 'axios';
+import Swal from 'sweetalert2'
+
 
 function AddDish() {
     let { access_token } = getToken();
@@ -132,11 +134,11 @@ function AddDish() {
           console.log("Please fill in all required fields");
           setIsLoading(false)
 
-          // Swal.fire({
-          //     icon: 'warning',
-          //     title: 'Missing Fields!',
-          //     text: "All fields are required to create a product",
-          // })
+          Swal.fire({
+              icon: 'warning',
+              title: 'Missing Fields!',
+              text: "All fields are required to create a dish",
+          })
           return;
       }
 
@@ -195,11 +197,11 @@ function AddDish() {
 
           navigate('/restaurant/dishes/')
 
-          // Swal.fire({
-          //     icon: 'success',
-          //     title: 'Product Created Successfully',
-          //     text: 'This product has been successfully created',
-          // });
+          Swal.fire({
+              icon: 'success',
+              title: 'Dish Created Successfully',
+              text: 'This Dish has been successfully created',
+          });
 
 
 

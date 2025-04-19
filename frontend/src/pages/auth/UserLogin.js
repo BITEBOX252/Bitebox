@@ -254,7 +254,16 @@ import { useLoginUserMutation } from '../../services/userAuthApi';
 import { getToken, storeToken } from '../../services/LocalStorageService';
 import { useDispatch } from 'react-redux';
 import { setUserToken } from '../../features/authSlice';
+import Swal from 'sweetalert2';
 
+
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top',
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
+});
 const inputTest = (data) => {
     data = data.trim();
     data = data.replace(/\\/g, '');
@@ -348,6 +357,10 @@ const UserLogin = () => {
             storeToken(res.data.token);
             const { access_token } = getToken();
             dispatch(setUserToken({ access_token }));
+            Toast.fire({
+                icon: 'success',
+                title: 'Signed in successfully'
+            });
             navigate('/');
         }
     };

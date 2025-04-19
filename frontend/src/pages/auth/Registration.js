@@ -183,7 +183,16 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useRegisterUserMutation } from '../../services/userAuthApi';
 import { storeToken } from '../../services/LocalStorageService';
+import Swal from 'sweetalert2';
 
+
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top',
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
+});
 const inputTest = (data) => {
   data = data.trim();
   data = data.replace(/\\/g, '');
@@ -282,6 +291,10 @@ const Registration = () => {
         }
         if (res.data) {
           storeToken(res.data.token);
+          Toast.fire({
+            icon: 'success',
+            title: 'Registered successfully'
+        });
           navigate('/dashboard');
         }
       },

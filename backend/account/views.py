@@ -112,7 +112,7 @@ class UserPasswordResetView(APIView):
 
 
 
-class ProfileView(generics.RetrieveAPIView):
+class ProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = ProfileSerializer
 

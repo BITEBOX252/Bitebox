@@ -185,6 +185,7 @@ import { useDispatch } from 'react-redux';
 import { setUserToken } from '../../features/authSlice';
 import axios from 'axios';
 import { useGetLoggedUserQuery } from '../../services/userAuthApi';
+import Swal from 'sweetalert2'
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -244,7 +245,11 @@ const Register = () => {
 
                 setServerSuccess("Restaurant created successfully!");
                 setIsFormVisible(false); // Hide form
-
+                Swal.fire({
+                    icon: "success",
+                    title: "Restaurant Account Created Successfully",
+                    
+                })
                 setTimeout(() => {
                     navigate('/restaurant/dashboard');
                 }, 2000);

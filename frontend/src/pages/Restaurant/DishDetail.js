@@ -8,7 +8,15 @@ import { setUserToken } from '../../features/authSlice'
 import { setUserInfo } from '../../features/userSlice'
 import { useDispatch } from 'react-redux';
 import { cartContext } from '../plugins/Context'
+import Swal from 'sweetalert2';
 
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top',
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
+});
 const DishDetail = () => {
     const dispatch = useDispatch();
 
@@ -130,6 +138,10 @@ const DishDetail = () => {
 
         const response= await axios.post(`http://127.0.0.1:8000/api/store/cart/`,formdata)
         console.log(response);
+        Toast.fire({
+            icon: 'success',
+            title: 'Added To Cart'
+        });
         const url = data ? `http://127.0.0.1:8000/api/store/cart-list/${CartId}/${data.id}/` : `http://127.0.0.1:8000/api/store/cart-list/${CartId}/`;
         const res= await axios.get(url)
         .then((res) => {

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useGetLoggedUserQuery } from '../../services/userAuthApi'
 import { getToken } from '../../services/LocalStorageService'
+import Swal from 'sweetalert2'
 
 function RestaurantSettings() {
     // const [profileData, setProfileData] = useState({ 'full_name': '', 'mobile': '', 'email': '', 'about': '', 'country': '', 'city': '', 'state': '', 'address': '', 'p_image': '', });
@@ -123,6 +124,10 @@ function RestaurantSettings() {
                 'Content-Type': 'multipart/form-data'
               },
             });
+            Swal.fire({
+              icon: 'success',
+              title: "Profile updated successfully",
+            })
             fetchProfileData()
             
       
@@ -152,6 +157,10 @@ function RestaurantSettings() {
               'Content-Type': 'multipart/form-data'
             },
           });
+          Swal.fire({
+            icon: 'success',
+            title: "Restaurant updated successfully",
+          })
           fetchRestaurantData()
           
     

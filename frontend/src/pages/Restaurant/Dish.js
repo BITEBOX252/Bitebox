@@ -6,6 +6,13 @@ import axios from 'axios';
 import { useGetLoggedUserQuery } from '../../services/userAuthApi'
 import { getToken } from '../../services/LocalStorageService'
 import { Link } from 'react-router-dom'
+
+import Swal from 'sweetalert2'
+
+
+
+
+
 function Dish() {
     const [dishes,setDishes]=useState([])
     let { access_token } = getToken();
@@ -25,12 +32,41 @@ function Dish() {
       }, [data]); // ✅ useEffect will re-run when `data` changes
 
       const handleDeleteDish= async (dishdid)=>{
-        await axios.delete(`http://127.0.0.1:8000/api/restaurant/delete-dish/${data.restaurant_id}/${dishdid}/`)
-        await axios.get(`http://127.0.0.1:8000/api/restaurant/dishes/${data.restaurant_id}/`).
-            then((res) => {
-              setDishes(res.data);
-              console.log(res.data);
-            })
+        const result = await Swal.fire({
+          icon: 'warning',
+          title: 'Delete Product?',
+          text: 'Are you sure you want to permanently delete this product?',
+          confirmButtonText: 'Yes, delete it!',
+          showCancelButton: true,
+      });
+
+      // Check if the user confirmed the deletion
+      if (result.isConfirmed) {
+          // Make an asynchronous request to delete the product using apiInstance
+          await axios.delete(`http://127.0.0.1:8000/api/restaurant/delete-dish/${data.restaurant_id}/${dishdid}/`)
+          await axios.get(`http://127.0.0.1:8000/api/restaurant/dishes/${data.restaurant_id}/`).
+              then((res) => {
+                setDishes(res.data);
+                console.log(res.data);
+              })
+          Swal.fire({
+              icon: 'success',
+              title: 'Product Deleted!',
+              text: 'This product has now been deleted forever.',
+          });
+          // Resolve the promise if deletion is successful
+          // In the context of a Promise, resolving means that the asynchronous operation or task has completed successfully.
+          
+        }else if (result.isDenied) {
+          // Display an error notification using SweetAlert if the user denies the deletion
+          Swal.fire({
+              icon: 'error',
+              title: 'An Error Occurred',
+              text: 'An error occurred while deleting the product. Please try again later.',
+          });
+          
+      }
+        
       }
   return (
     <div className="container-fluid" id="main">
