@@ -40,7 +40,6 @@ class Dish(models.Model):  # Renamed from Product to Dish
     price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     old_price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     tags = models.CharField(max_length=1000, null=True, blank=True)
-    shipping_amount = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     stock_qty = models.PositiveIntegerField(default=1)
     in_stock = models.BooleanField(default=True)
     status = models.CharField(max_length=100, choices=STATUS, default="published")
@@ -151,7 +150,6 @@ class Cart(models.Model):
     qty=models.PositiveIntegerField(default=0)
     price=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
     sub_total=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
-    shipping_amount=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
     service_fee=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
     tax_fee=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
     total=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
@@ -186,7 +184,6 @@ class CartOrder(models.Model):
     restaurant=models.ManyToManyField(Restaurant,blank=True)
     buyer=models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
     sub_total=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
-    shipping_amount=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
     service_fee=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
     tax_fee=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
     total=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
@@ -200,7 +197,7 @@ class CartOrder(models.Model):
     email=models.CharField(max_length=100,null=True,blank=True)
     mobile=models.CharField(max_length=100,null=True,blank=True)
 
-    # Shipping Address
+
     address=models.CharField(max_length=100,null=True,blank=True)
     city=models.CharField(max_length=100,null=True,blank=True)
     state=models.CharField(max_length=100,null=True,blank=True)
@@ -224,7 +221,6 @@ class CartOrderItem(models.Model):
     qty=models.PositiveIntegerField(default=0)
     price=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
     sub_total=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
-    shipping_amount=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
     service_fee=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
     tax_fee=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)
     total=models.DecimalField(default=0.00,max_digits=12,decimal_places=2)

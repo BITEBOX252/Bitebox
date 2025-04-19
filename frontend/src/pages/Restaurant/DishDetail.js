@@ -114,14 +114,14 @@ const DishDetail = () => {
         // console.log(sizeValue);
         // console.log(currAddress.country);
         console.log(priceByPortionSize);
-        console.log(product.shipping_amount);
+        // console.log(product.shipping_amount);
         try {
         const formdata=new FormData()
         formdata.append("dish_id",product.id)
         formdata.append("user_id",data?.id)
         formdata.append("qty",qtyValue)
         formdata.append("price",product.price)
-        formdata.append("shipping_amount",product.shipping_amount)
+        // formdata.append("shipping_amount",product.shipping_amount)
         // formdata.append("country",currAddress.country)
         formdata.append("country","undefined")
         formdata.append("portionSize",portionSizeValue)

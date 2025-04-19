@@ -110,7 +110,7 @@ const [order, setOrder] = useState([])
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-3 mb-4 mb-lg-0">
+                  {/* <div className="col-lg-3 mb-4 mb-lg-0">
                     <div
                       className="rounded shadow"
                       style={{ backgroundColor: "#bbfbeb" }}
@@ -130,7 +130,7 @@ const [order, setOrder] = useState([])
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-lg-4 mb-4 mb-lg-0 mt-5">
                     <div
                       className="rounded shadow"

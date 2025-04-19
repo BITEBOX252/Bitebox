@@ -84,7 +84,7 @@ function Cart() {
   setDishQty(initialqty)
  },[cart])
 
-const updateCart= async(dish_id,price,shipping_amount,portion,spice)=>{
+const updateCart= async(dish_id,price,portion,spice)=>{
   const qtyValue=dishQty[dish_id]
   console.log(qtyValue);
   const formdata=new FormData()
@@ -92,7 +92,7 @@ const updateCart= async(dish_id,price,shipping_amount,portion,spice)=>{
         formdata.append("user_id",data?.id)
         formdata.append("qty",qtyValue)
         formdata.append("price",price)
-        formdata.append("shipping_amount",shipping_amount)
+        // formdata.append("shipping_amount",shipping_amount)
         // formdata.append("country",currAddress.country)
         formdata.append("portionSize",portion)
         formdata.append("spiceLevel",spice)
@@ -274,7 +274,7 @@ const createCartOrder = async () => {
 
                           />
                         </div>
-                        <button onClick={()=>updateCart(c.dish.id,c.dish.price,c.shipping_amount,c.portion_size
+                        <button onClick={()=>updateCart(c.dish.id,c.dish.price,c.portion_size
 ,c.spice_level
 )} className='ms-2 btn btn-primary'><i className='fas fa-rotate-right'></i></button>
                       </div>
@@ -377,10 +377,10 @@ const createCartOrder = async () => {
                     <span>Subtotal </span>
                     <span>${cartTotal.subtotal}</span>
                   </div>
-                  <div className="d-flex justify-content-between">
+                  {/* <div className="d-flex justify-content-between">
                     <span>Shipping </span>
                     <span>${cartTotal.shipping}</span>
-                  </div>
+                  </div> */}
                   <div className="d-flex justify-content-between">
                     <span>Tax </span>
                     <span>${cartTotal.tax}</span>

@@ -124,10 +124,10 @@ function Checkout() {
                       <span>Subtotal </span>
                       <span>${order.sub_total}</span>
                     </div>
-                    <div className="d-flex justify-content-between">
+                    {/* <div className="d-flex justify-content-between">
                       <span>Shipping </span>
                       <span>${order.shipping_amount}</span>
-                    </div>
+                    </div> */}
                     <div className="d-flex justify-content-between">
                       <span>Tax </span>
                       <span>${order.tax_fee}</span>

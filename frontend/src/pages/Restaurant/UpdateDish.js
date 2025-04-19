@@ -18,7 +18,7 @@ function UpdateDish() {
             // brand: '',
             price: '',
             old_price: '',
-            shipping_amount: '',
+            // shipping_amount: '',
             stock_qty: '',
             restaurant:null
         });
@@ -134,7 +134,7 @@ function UpdateDish() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true)
-        if (dish.title == "" || dish.description == "" || dish.price == "" || dish.category === null || dish.shipping_amount == "" || dish.stock_qty == "" || dish.image === null) {
+        if (dish.title == "" || dish.description == "" || dish.price == "" || dish.category === null || dish.stock_qty == "" || dish.image === null) {
             // If any required field is missing, show an error message or take appropriate action
             console.log("Please fill in all required fields");
             setIsLoading(false)
@@ -335,18 +335,7 @@ function UpdateDish() {
                               onChange={handleDishInputChange}
                             />
                           </div>
-                          <div className="col-lg-6 mb-2 ">
-                            <label htmlFor="" className="mb-2">
-                              Shipping Amount
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="shipping_amount"
-                              value={dish.shipping_amount || ""}
-                              onChange={handleDishInputChange}
-                            />
-                          </div>
+                          
                           <div className="col-lg-6 mb-2 ">
                             <label htmlFor="" className="mb-2">
                               Stock Qty

@@ -92,7 +92,7 @@ class CartAPIView(generics.ListCreateAPIView):
         price=payload['price']
         print(type(price))
         
-        shipping_amount=payload['shipping_amount']
+        # shipping_amount=payload['shipping_amount']
         country=payload['country']
         if country == "undefined":
             country ="Pakistan"
@@ -127,7 +127,7 @@ class CartAPIView(generics.ListCreateAPIView):
             cart.qty=qty
             cart.price=price 
             cart.sub_total=Decimal(price)*int(qty)
-            cart.shipping_amount=Decimal(shipping_amount)*int(qty)
+            # cart.shipping_amount=Decimal(shipping_amount)*int(qty)
             cart.tax_fee=int(qty) * Decimal(tax_rate)
             cart.spice_level=spice_level
             cart.portion_size=portion_size
@@ -137,7 +137,7 @@ class CartAPIView(generics.ListCreateAPIView):
             service_fee=10 / 100
             cart.service_fee=Decimal(service_fee)*cart.sub_total
             
-            cart.total=cart.sub_total+ cart.shipping_amount+cart.service_fee+cart.tax_fee
+            cart.total=cart.sub_total+cart.service_fee+cart.tax_fee
             cart.save()
             
             return Response({"message":"Cart Updated Successfully!"},status=status.HTTP_200_OK)
@@ -148,7 +148,7 @@ class CartAPIView(generics.ListCreateAPIView):
             cart.qty=qty
             cart.price=price
             cart.sub_total=Decimal(price)*int(qty)
-            cart.shipping_amount=Decimal(shipping_amount)*int(qty)
+            # cart.shipping_amount=Decimal(shipping_amount)*int(qty)
             cart.tax_fee=int(qty) * Decimal(tax_rate)
             cart.spice_level=spice_level
             cart.portion_size=portion_size
@@ -158,7 +158,7 @@ class CartAPIView(generics.ListCreateAPIView):
             service_fee=10 / 100
             cart.service_fee=Decimal(service_fee) * cart.sub_total
             
-            cart.total=cart.sub_total+ cart.shipping_amount+cart.service_fee+cart.tax_fee
+            cart.total=cart.sub_total+cart.service_fee+cart.tax_fee
             cart.save()
         
             return Response({"message":"Cart Created Successfully!"},status=status.HTTP_201_CREATED)
@@ -199,21 +199,21 @@ class CartDetailAPIView(generics.RetrieveAPIView):
     def get(self,request,*args, **kwargs):
         queryset=self.get_queryset()
 
-        total_shipping=0.0
+        # total_shipping=0.0
         total_tax=0.0
         total_service_fee=0.0
         total_subtotal=0.0
         total_total=0.0
 
         for cart_item in queryset:
-            total_shipping+=float(self.calculate_shipping(cart_item))
+            # total_shipping+=float(self.calculate_shipping(cart_item))
             total_tax+=float(self.calculate_tax(cart_item))
             total_service_fee+=float(self.calculate_service_fee(cart_item))
             total_subtotal+=float(self.calculate_subtotal(cart_item))
             total_total+=float(self.calculate_total(cart_item))
 
         data={
-            'shipping':total_shipping,
+            # 'shipping':total_shipping,
             'tax':total_tax,
             'service_fee':total_service_fee,
             'subtotal':total_subtotal,
@@ -222,8 +222,8 @@ class CartDetailAPIView(generics.RetrieveAPIView):
 
         return Response(data)
     
-    def calculate_shipping(self,cart_item):
-        return cart_item.shipping_amount
+    # def calculate_shipping(self,cart_item):
+    #     return cart_item.shipping_amount
 
     def calculate_tax(self,cart_item):
         return cart_item.tax_fee
@@ -271,7 +271,7 @@ class createOrderAPIView(generics.CreateAPIView):
             user=None
         cart_items=Cart.objects.filter(cart_id=cart_id)
 
-        total_shipping=Decimal(0.00)
+        # total_shipping=Decimal(0.00)
         total_tax=Decimal(0.00)
         total_service_fee=Decimal(0.00)
         total_sub_total=Decimal(0.00)
@@ -298,13 +298,13 @@ class createOrderAPIView(generics.CreateAPIView):
                 spice_level=c.spice_level,
                 price=c.price,
                 sub_total=c.sub_total,
-                shipping_amount=c.shipping_amount,
+                # shipping_amount=c.shipping_amount,
                 service_fee=c.service_fee,
                 tax_fee=c.tax_fee,
                 total=c.total,
                 initial_total=c.total,
             )
-            total_shipping+=Decimal(c.shipping_amount)
+            # total_shipping+=Decimal(c.shipping_amount)
             total_tax+=Decimal(c.tax_fee)
             total_service_fee+=Decimal(c.service_fee)
             total_sub_total+=Decimal(c.sub_total)
@@ -317,7 +317,7 @@ class createOrderAPIView(generics.CreateAPIView):
         for o in order_items:
             send_notification(restaurant=o.restaurant,order=order,order_item=o)
         order.sub_total=total_sub_total
-        order.shipping_amount=total_shipping
+        # order.shipping_amount=total_shipping
         order.service_fee=total_service_fee
         order.tax_fee=total_tax
         order.initial_total=total_total

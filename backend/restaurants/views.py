@@ -118,7 +118,7 @@ class DashboardStatAPIView(generics.ListAPIView):
         dish_count=Dish.objects.filter(restaurant=restaurant).count()
         order_count=CartOrder.objects.filter(restaurant=restaurant,payment_status="paid").count()
         # foriegn key
-        revenue=CartOrderItem.objects.filter(restaurant=restaurant,order__payment_status="paid").aggregate(total_revenue=models.Sum(models.F('sub_total')+ models.F('shipping_amount')))['total_revenue'] or 0
+        revenue=CartOrderItem.objects.filter(restaurant=restaurant,order__payment_status="paid").aggregate(total_revenue=models.Sum(models.F('sub_total')))['total_revenue'] or 0
 
 
         return [{
@@ -207,7 +207,7 @@ class RevenueAPIView(generics.ListAPIView):
     def get_queryset(self):
         restaurant_id=self.kwargs['restaurant_id']
         restaurant=Restaurant.objects.get(id=restaurant_id)
-        return CartOrderItem.objects.filter(restaurant=restaurant,order__payment_status="paid").aggregate(total_revenue=models.Sum(models.F('sub_total')+ models.F('shipping_amount')))['total_revenue'] or 0
+        return CartOrderItem.objects.filter(restaurant=restaurant,order__payment_status="paid").aggregate(total_revenue=models.Sum(models.F('sub_total')))['total_revenue'] or 0
     
 
 
@@ -596,9 +596,9 @@ class Earning(generics.ListAPIView):
         restaurant_id = self.kwargs['restaurant_id']
         restaurant = Restaurant.objects.get(id=restaurant_id)
 
-        # Revenue expression: subtotal + shipping, wrapped properly
+     
         revenue_expr = ExpressionWrapper(
-            F('sub_total') + F('shipping_amount'),
+            F('sub_total'),
             output_field=DecimalField()
         )
 
@@ -644,7 +644,7 @@ def MonthlyEarningTracker(request, restaurant_id):
         .annotate(
             sales_count=models.Sum("qty"),
             total_earning=models.Sum(
-                models.F('sub_total') + models.F('shipping_amount'))
+                models.F('sub_total'))
         )
         .order_by("-month")
     )
