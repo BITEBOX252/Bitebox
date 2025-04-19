@@ -248,7 +248,7 @@ const createCartOrder = async () => {
                         <span>3</span>
                       </p> */}
                       <p className='mb-0'>
-                        <span className="text-muted me-2">Vendor:</span>
+                        <span className="text-muted me-2">Restaurant:</span>
                         <span>{c.dish?.restaurant.name}</span>
                       </p>
                       <p className="mt-3">
@@ -396,7 +396,7 @@ const createCartOrder = async () => {
                     <span>${cartTotal.total}</span>
                   </div>
                   <button onClick={createCartOrder} className="btn btn-primary btn-rounded w-100" >
-                    Got to checkout
+                    Confirm Order
                   </button>
                 </section>
                 <section className="shadow rounded-3 card p-4 rounded-5">

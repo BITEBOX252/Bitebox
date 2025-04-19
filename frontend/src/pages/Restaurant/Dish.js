@@ -34,8 +34,8 @@ function Dish() {
       const handleDeleteDish= async (dishdid)=>{
         const result = await Swal.fire({
           icon: 'warning',
-          title: 'Delete Product?',
-          text: 'Are you sure you want to permanently delete this product?',
+          title: 'Delete Dish?',
+          text: 'Are you sure you want to permanently delete this dish?',
           confirmButtonText: 'Yes, delete it!',
           showCancelButton: true,
       });
@@ -51,8 +51,8 @@ function Dish() {
               })
           Swal.fire({
               icon: 'success',
-              title: 'Product Deleted!',
-              text: 'This product has now been deleted forever.',
+              title: 'Dish Deleted!',
+              text: 'This dish has now been deleted forever.',
           });
           // Resolve the promise if deletion is successful
           // In the context of a Promise, resolving means that the asynchronous operation or task has completed successfully.
@@ -62,7 +62,7 @@ function Dish() {
           Swal.fire({
               icon: 'error',
               title: 'An Error Occurred',
-              text: 'An error occurred while deleting the product. Please try again later.',
+              text: 'An error occurred while deleting the dish. Please try again later.',
           });
           
       }

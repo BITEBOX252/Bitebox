@@ -43,7 +43,7 @@ from shortuuid.django_fields import ShortUUIDField
 #         user.save(using=self._db)
 #         return user
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, tc, password=None,password2=None, latitude=None, longitude=None):
+    def create_user(self, email, name, password=None,password2=None, latitude=None, longitude=None):
         """
         Creates and saves a User with the given email, name, tc, and password.
         """
@@ -53,7 +53,7 @@ class UserManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             name=name,
-            tc=tc,
+          
             latitude=latitude,
             longitude=longitude
         )
@@ -63,7 +63,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, name, tc, password=None):
+    def create_superuser(self, email, name, password=None):
         """
         Creates and saves a superuser with the given email, name, tc, and password.
         """
@@ -71,7 +71,7 @@ class UserManager(BaseUserManager):
             email=email,
             password=password,
             name=name,
-            tc=tc,
+            
             latitude=None,  # Make latitude and longitude optional
             longitude=None
         )
@@ -92,7 +92,7 @@ class User(AbstractBaseUser):
     latitude = models.DecimalField(max_digits=15, decimal_places=10, blank=True, null=True)
     longitude = models.DecimalField(max_digits=15, decimal_places=10, blank=True, null=True)
 
-    tc = models.BooleanField()
+    
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -101,7 +101,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'tc']
+    REQUIRED_FIELDS = ['name']
 
     def __str__(self):
         return self.email

@@ -152,13 +152,13 @@ const Navbar = () => {
                   <li>
                     <Link className="dropdown-item" to="/vendor/products/">
                       {" "}
-                      <i className="bi bi-grid-fill"></i> Products
+                      <i className="bi bi-grid-fill"></i> Dishes
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/vendor/product/new/">
                       {" "}
-                      <i className="fas fa-plus-circle"></i> Add Products
+                      <i className="fas fa-plus-circle"></i> Add Dishes
                     </Link>
                   </li>
                   <li>

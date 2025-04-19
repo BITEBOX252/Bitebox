@@ -20,7 +20,7 @@ const Toast = Swal.mixin({
 const DishDetail = () => {
     const dispatch = useDispatch();
 
-    const [product,setProduct]= useState({})
+    const [dishes,setDishes]= useState({})
     const [specification,setSpecification]= useState([])
     const [gallery,setGallery]= useState([])
     const [spiceLevel,setSpiceLevel]= useState([])
@@ -58,7 +58,7 @@ const DishDetail = () => {
       
         console.log(res.data);
         
-        setProduct(res.data)
+        setDishes(res.data)
         setSpecification(res.data?.specification)
         setGallery(res.data?.gallery)
         setSpiceLevel(res.data?.spice_level)
@@ -86,7 +86,7 @@ const DishDetail = () => {
                 // console.log(res.data?.price_by_size);
                 
                 setPriceByPortionSize(res.data?.price_by_portion_size)
-                setProduct(res.data)
+                setDishes(res.data)
                 setSpecification(res.data?.specification)
                 setGallery(res.data?.gallery)
                 setSpiceLevel(res.data?.spice_level)
@@ -125,10 +125,10 @@ const DishDetail = () => {
         // console.log(product.shipping_amount);
         try {
         const formdata=new FormData()
-        formdata.append("dish_id",product.id)
+        formdata.append("dish_id",dishes.id)
         formdata.append("user_id",data?.id)
         formdata.append("qty",qtyValue)
-        formdata.append("price",product.price)
+        formdata.append("price",dishes.price)
         // formdata.append("shipping_amount",product.shipping_amount)
         // formdata.append("country",currAddress.country)
         formdata.append("country","undefined")
@@ -174,7 +174,7 @@ const DishDetail = () => {
                             <div className="col-12 col-lg-12">
                                 <div className="lightbox">
                                     <img
-                                        src={product.image}
+                                        src={dishes.image}
                                         style={{
                                             width: "100%",
                                             height: 500,
@@ -214,7 +214,7 @@ const DishDetail = () => {
                 <div className="col-md-6 mb-4 mb-md-0">
                     {/* Details */}
                     <div>
-                        <h1 className="fw-bold mb-3">{product.title}</h1>
+                        <h1 className="fw-bold mb-3">{dishes.title}</h1>
                         <div className="d-flex text-primary just align-items-center">
                             <ul className="mb-3 d-flex p-0" style={{ listStyle: "none" }}>
                                 <li>
@@ -233,11 +233,11 @@ const DishDetail = () => {
                             </ul>
                         </div>
                         <h5 className="mb-3">
-                            <s className="text-muted me-2 small align-middle">${product.old_price}</s> 
-                            <span className="align-middle">${priceByPortionSize > 0 ? priceByPortionSize : product.price}</span> 
+                            <s className="text-muted me-2 small align-middle">${dishes.old_price}</s> 
+                            <span className="align-middle">${priceByPortionSize > 0 ? priceByPortionSize : dishes.price}</span> 
                         </h5>
                         <p className="text-muted">
-                            {product.description}
+                            {dishes.description}
                         </p>
                         <div className="table-responsive">
                             <table className="table table-sm table-borderless mb-0">
@@ -246,7 +246,7 @@ const DishDetail = () => {
                                         <th className="ps-0 w-25" scope="row">
                                             <strong>Category</strong>
                                         </th>
-                                        <td>{product.category?.title}</td>
+                                        <td>{dishes.category?.title}</td>
                                     </tr>
                                     {specification.map((s,index)=>(
 
@@ -340,7 +340,7 @@ const DishDetail = () => {
             </li>
             <li className="nav-item" role="presentation">
                 <button className="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">
-                    Vendor
+                    Restaurant
                 </button>
             </li>
             <li className="nav-item" role="presentation">
@@ -364,7 +364,7 @@ const DishDetail = () => {
                                         <th className="ps-0 w-25" scope="row">
                                             <strong>Category</strong>
                                         </th>
-                                        <td>{product.category?.title}</td>
+                                        <td>{dishes.category?.title}</td>
                                     </tr>
                                     {specification.map((s,index)=>(
 
@@ -468,7 +468,7 @@ const DishDetail = () => {
                                             <h5 className="card-title">User 1</h5>
                                             <p className="card-text">August 10, 2023</p>
                                             <p className="card-text">
-                                                This is a great product! I'm really satisfied with
+                                                This is a great dish! I'm really satisfied with
                                                 it.
                                             </p>
                                         </div>
@@ -489,7 +489,7 @@ const DishDetail = () => {
                                             <h5 className="card-title">User 2</h5>
                                             <p className="card-text">August 15, 2023</p>
                                             <p className="card-text">
-                                                The quality of this product exceeded my
+                                                The quality of this dish exceeded my
                                                 expectations!
                                             </p>
                                         </div>

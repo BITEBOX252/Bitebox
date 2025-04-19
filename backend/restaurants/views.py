@@ -56,7 +56,7 @@ class RestaurantCreateView(generics.CreateAPIView):
             longitude=longitude
         )
 
-        return Response({"message": "Created vendor account"}, status=status.HTTP_201_CREATED)
+        return Response({"message": "Created Restaurant account"}, status=status.HTTP_201_CREATED)
 
 
    

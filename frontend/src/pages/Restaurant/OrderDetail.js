@@ -204,7 +204,7 @@ function OrderDetail() {
                       <table className="table align-middle mb-0 bg-white">
                         <thead className="bg-light">
                           <tr>
-                            <th>Product</th>
+                            <th>Dish</th>
                             <th>Price</th>
                             <th>Qty</th>
                             <th>Total</th>

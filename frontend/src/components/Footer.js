@@ -102,7 +102,7 @@ const Footer=()=>{
                 </div>
                 <div className="col-lg-3 mb-4 mb-lg-0">
                     <p>
-                        <strong>Products</strong>
+                        <strong>Dishes</strong>
                     </p>
                     <ul className="list-unstyled">
                         <li>

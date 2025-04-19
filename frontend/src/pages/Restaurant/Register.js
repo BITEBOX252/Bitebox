@@ -205,6 +205,8 @@ const Register = () => {
     const { data: userData } = useGetLoggedUserQuery(access_token);
     const [isFormVisible, setIsFormVisible] = useState(true);
 
+
+    
     useEffect(() => {
         dispatch(setUserToken({ access_token }));
     }, [dispatch, access_token]);

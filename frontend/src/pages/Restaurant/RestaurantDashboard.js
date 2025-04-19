@@ -10,7 +10,7 @@ import Sidebar from './Sidebar';
 
 function RestaurantDashboard() {
   const [stats,setStats]=useState({})
-  const [products,setProducts]=useState([])
+  const [dishes,setDishes]=useState([])
   let { access_token } = getToken();
   const {data,isSuccess} = useGetLoggedUserQuery(access_token)
   useEffect(() => {
@@ -26,7 +26,7 @@ function RestaurantDashboard() {
         });
         axios.get(`http://127.0.0.1:8000/api/restaurant/dishes/${data.restaurant_id}/`).
         then((res) => {
-          setProducts(res.data);
+          setDishes(res.data);
           console.log(res.data);
         })
         .catch((err) => {
@@ -59,7 +59,7 @@ function RestaurantDashboard() {
                 <div className="rotate">
                   <i className="bi bi-grid fa-5x" />
                 </div>
-                <h6 className="text-uppercase">Products</h6>
+                <h6 className="text-uppercase">Dishes</h6>
                 <h1 className="display-1">{stats.dishes}</h1>
               </div>
             </div>
@@ -136,7 +136,7 @@ function RestaurantDashboard() {
                   role="tab"
                   data-toggle="tab"
                 >
-                  Products
+                  Dishes
                 </a>
               </li>
               <li className="nav-item">
@@ -154,7 +154,7 @@ function RestaurantDashboard() {
             <div className="tab-content">
               <br />
               <div role="tabpanel" className="tab-pane active" id="home1">
-                <h4>Products</h4>
+                <h4>Dishes</h4>
                 <table className="table">
                   <thead className="table-dark">
                     <tr>
@@ -168,7 +168,7 @@ function RestaurantDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {products?.map((p,index)=>(
+                    {dishes?.map((p,index)=>(
 
                     <tr key={index}>
                       <th scope="row">

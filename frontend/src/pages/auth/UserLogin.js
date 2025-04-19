@@ -281,6 +281,8 @@ const regPasswordTest = (data) => {
 };
 
 const UserLogin = () => {
+
+    const [showPasswords, setShowPasswords] = useState(false);
     const [serverError, setServerError] = useState({});
     const [formError, setFormError] = useState({});
     const navigate = useNavigate();
@@ -288,7 +290,9 @@ const UserLogin = () => {
     const dispatch = useDispatch();
 
     const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null });
-
+    const togglePasswordVisibility = () => {
+        setShowPasswords(!showPasswords);
+      };
     useEffect(() => {
         let isMounted = true;
 
@@ -416,7 +420,7 @@ const UserLogin = () => {
                                                     id='password'
                                                     name='password'
                                                     label='Password'
-                                                    type='password'
+                                                    type={showPasswords ? 'text' : 'password'}
                                                     error={!!formError.password}
                                                     helperText={formError.password}
                                                 />
@@ -426,7 +430,16 @@ const UserLogin = () => {
                                                     </Typography>
                                                 )}
                                             </div>
-
+                                            <div style={{ marginBottom: '1rem' }}>
+        <label>
+          <input
+            type="checkbox"
+            checked={showPasswords}
+            onChange={togglePasswordVisibility}
+          />{' '}
+          Show Password
+        </label>
+      </div>
                                             <button className='btn btn-primary w-100' type="submit" disabled={isLoading}>
                                                 <span className="mr-2">Sign In </span>
                                                 <i className="fas fa-sign-in-alt" />
