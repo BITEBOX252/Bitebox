@@ -14,3 +14,6 @@ dj-database-url==2.1.0
 shortuuid==1.0.11
 Pillow
 setuptools
+daphne
+channels
+channels-redis

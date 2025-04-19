@@ -20,7 +20,8 @@ from rest_framework.decorators import api_view
 from django.db.models.functions import ExtractMonth
 from datetime import datetime, timedelta
 from django.db.models import F, Sum, ExpressionWrapper, DecimalField
-
+from .email import send_tracking_email
+import uuid
 class RestaurantCreateView(generics.CreateAPIView):
     serializer_class = RestaurantCreateSerializer
     queryset = Restaurant.objects.all()
@@ -153,15 +154,50 @@ class OrderAPIView(generics.ListAPIView):
         restaurant=Restaurant.objects.get(id=restaurant_id)
         return CartOrder.objects.filter(restaurant=restaurant).order_by('-id')
 
-class OrderDetailAPIView(generics.RetrieveAPIView):
-    serializer_class=CartOrderSerializer
-    permission_classes=[AllowAny]
+# class OrderDetailAPIView(generics.RetrieveUpdateAPIView):
+#     serializer_class=CartOrderSerializer
+#     permission_classes=[AllowAny]
+
+#     def get_object(self):
+#         restaurant_id=self.kwargs['restaurant_id']
+#         order_id=self.kwargs['order_id']
+#         restaurant=Restaurant.objects.get(id=restaurant_id)
+#         return CartOrder.objects.get(restaurant=restaurant,oid=order_id)
+
+class OrderDetailAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = CartOrderSerializer
+    permission_classes = [AllowAny]
 
     def get_object(self):
-        restaurant_id=self.kwargs['restaurant_id']
-        order_id=self.kwargs['order_id']
-        restaurant=Restaurant.objects.get(id=restaurant_id)
-        return CartOrder.objects.get(restaurant=restaurant,oid=order_id)
+        restaurant_id = self.kwargs['restaurant_id']
+        order_id = self.kwargs['order_id']
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+        return CartOrder.objects.get(restaurant=restaurant, oid=order_id)
+
+    def update(self, request, *args, **kwargs):
+        order = self.get_object()
+        prev_status = order.order_status  # Save previous status
+        new_status = request.data.get("order_status")
+
+        # If status changes to 'fulfilled', generate token and send emails
+        if new_status == 'fulfilled' and prev_status != 'fulfilled':
+            
+                order.tracking_token = uuid.uuid4()
+                order.save()
+
+                # Create tracking URL
+                tracking_url = f"http://localhost:3000/rider/tracking/{order.oid}/{order.tracking_token}/"
+
+                # Get all active delivery boys
+                restaurant = order.restaurant.first()  # Assuming one restaurant per order
+                delivery_boys = restaurant.delivery_boys.filter(is_active=True)
+                print("gggggggggggggggggggggggggggg")
+                for boy in delivery_boys:
+                    if boy.email:
+                        send_tracking_email(boy.email, tracking_url, order.oid)
+
+        # Proceed with default update
+        return super().update(request, *args, **kwargs)
     
 class RevenueAPIView(generics.ListAPIView):
     serializer_class=CartOrderItemSerializer

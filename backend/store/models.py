@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from account.models import User,Profile
 from restaurants.models import Restaurant
 from django.dispatch import receiver
+import uuid
 from django.db.models.signals import post_save
 # Create your models here.
 class Category(models.Model):
@@ -206,7 +207,10 @@ class CartOrder(models.Model):
     country=models.CharField(max_length=100,null=True,blank=True)
     oid=ShortUUIDField(unique=True,length=10,alphabet="abcdefg12345")
     date=models.DateTimeField(auto_now_add=True)
-    
+    tracking_token = models.UUIDField(default=uuid.uuid4, unique=True)
+
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return self.oid
