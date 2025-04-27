@@ -20,7 +20,7 @@ function Dish() {
     useEffect(() => {
         if (data?.restaurant_id) {  // ✅ Ensure restaurant_id exists before making API call
           
-            axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/dishes/${data.restaurant_id}/`).
+            axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/dishes/${data.restaurant_id}/`).
             then((res) => {
               setDishes(res.data);
               console.log(res.data);
@@ -43,8 +43,8 @@ function Dish() {
       // Check if the user confirmed the deletion
       if (result.isConfirmed) {
           // Make an asynchronous request to delete the product using apiInstance
-          await axios.delete(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/delete-dish/${data.restaurant_id}/${dishdid}/`)
-          await axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/dishes/${data.restaurant_id}/`).
+          await axios.delete(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/delete-dish/${data.restaurant_id}/${dishdid}/`)
+          await axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/dishes/${data.restaurant_id}/`).
               then((res) => {
                 setDishes(res.data);
                 console.log(res.data);

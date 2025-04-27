@@ -18,7 +18,7 @@ function Earnings() {
       if (data?.restaurant_id) {
         axios
           .get(
-            `ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/earnings/${data?.restaurant_id}/`
+            `ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/earnings/${data?.restaurant_id}/`
           )
           .then((res) => {
             setEarningStats(res.data[0]);
@@ -27,7 +27,7 @@ function Earnings() {
 
         axios
           .get(
-            `ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/monthly-earnings/${data?.restaurant_id}/`
+            `ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/monthly-earnings/${data?.restaurant_id}/`
           )
           .then((res) => {
             console.log(res.data);

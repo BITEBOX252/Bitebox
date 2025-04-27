@@ -17,7 +17,7 @@ function Checkout() {
 
 
   useEffect(() => {
-      axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/store/checkout/${param?.order_oid}/`).then((res) => {
+      axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/store/checkout/${param?.order_oid}/`).then((res) => {
         setOrder(res.data);
         console.log(res.data);
       })
@@ -145,7 +145,7 @@ function Checkout() {
                     
 
                     <form
-                      action={`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/stripe-checkout/ORDER_ID/`}
+                      action={`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/stripe-checkout/ORDER_ID/`}
                       method="POST"
                     >
                       <button

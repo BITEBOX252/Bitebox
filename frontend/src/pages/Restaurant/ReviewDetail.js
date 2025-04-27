@@ -18,7 +18,7 @@ function ReviewDetail() {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/reviews/${data?.restaurant_id}/${params.review_id}/`)
+            const response = await axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/reviews/${data?.restaurant_id}/${params.review_id}/`)
             setReview(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -42,7 +42,7 @@ function ReviewDetail() {
 
         formdata.append('reply', updateReviews.reply)
 
-        await axios.patch(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/reviews/${data?.restaurant_id}/${params.review_id}/`, formdata).then((res) => {
+        await axios.patch(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/reviews/${data?.restaurant_id}/${params.review_id}/`, formdata).then((res) => {
             console.log(res.data);
             fetchData()
             updateReviews.reply = ""

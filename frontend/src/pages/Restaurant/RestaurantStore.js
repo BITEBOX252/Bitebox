@@ -11,11 +11,11 @@ function RestaurantStore() {
     const param=useParams()
 
     useEffect(() => {
-        axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/shop/${param.slug}/`).then((res)=>{
+        axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/shop/${param.slug}/`).then((res)=>{
             setRestaurant(res.data)
             console.log(res.data)
         })
-        axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/dishes-store/${param.slug}/`).then((res)=>{
+        axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/dishes-store/${param.slug}/`).then((res)=>{
             console.log(res.data)
             setDish(res.data)
         })

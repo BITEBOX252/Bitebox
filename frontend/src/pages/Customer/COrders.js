@@ -14,7 +14,7 @@ function COrders() {
   useEffect(async () => {
     if (data?.id) {
       await axios
-        .get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/customer/orders/${data?.id}`)
+        .get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/customer/orders/${data?.id}`)
         .then((res) => {
           console.log(res);
           setOrders(res.data);

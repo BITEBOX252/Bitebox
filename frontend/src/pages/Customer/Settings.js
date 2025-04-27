@@ -29,7 +29,7 @@ function Settings() {
             if (data?.id) {
             
                 try {
-                    axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/user/account/${data?.id}/`).then((res) => {
+                    axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/user/account/${data?.id}/`).then((res) => {
                         console.log(res.data);
                         setProfileData(res.data)
                         // setProfileData({
@@ -73,7 +73,7 @@ function Settings() {
         e.preventDefault();
         setLoading(true)
 
-        const res = await axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/user/account/${data?.id}/`);
+        const res = await axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/user/account/${data?.id}/`);
 
         const formData = new FormData();
         if (profileData.image && profileData.image !== res.data.image) {
@@ -84,7 +84,7 @@ function Settings() {
         formData.append('address', profileData.address);
 
         try {
-            await axios.patch(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/user/account/${data?.id}/`, formData, {
+            await axios.patch(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/user/account/${data?.id}/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },

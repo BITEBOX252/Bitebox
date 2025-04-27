@@ -20,7 +20,7 @@ function RestaurantSettings() {
         if (data?.id) {
           
           try {
-              axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/profile-update/${data?.id}/`).then((res) => {
+              axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/profile-update/${data?.id}/`).then((res) => {
               setProfileData(res.data)
             console.log(res.data);
         //     setProfileData({
@@ -45,7 +45,7 @@ function RestaurantSettings() {
         if (data?.id) {
           
           try {
-              axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/settings-update/${data?.restaurant_id}/`).then((res) => {
+              axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/settings-update/${data?.restaurant_id}/`).then((res) => {
               setRestaurantData(res.data)
             console.log(res.data);
         //     setProfileData({
@@ -104,7 +104,7 @@ function RestaurantSettings() {
         // setLoading(true)
         if (data?.id) {
           
-          const res = await  axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/profile-update/${data.id}/`);
+          const res = await  axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/profile-update/${data.id}/`);
     
         const formData = new FormData();
         if (profileData.image && profileData.image !== res.data.image) {
@@ -119,7 +119,7 @@ function RestaurantSettings() {
       
           
           try {
-            axios.patch(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/profile-update/${data.id}/`, formData, {
+            axios.patch(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/profile-update/${data.id}/`, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data'
               },
@@ -141,7 +141,7 @@ function RestaurantSettings() {
         // setLoading(true)
         if (data?.id) {
           
-        const res = await  axios.get(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/settings-update/${data?.restaurant_id}/`);
+        const res = await  axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/settings-update/${data?.restaurant_id}/`);
     
         const formData = new FormData();
         if (restaurantData.image && restaurantData.image !== res.data.image) {
@@ -152,7 +152,7 @@ function RestaurantSettings() {
         
     
         try {
-          axios.patch(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/settings-update/${data?.restaurant_id}/`, formData, {
+          axios.patch(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/settings-update/${data?.restaurant_id}/`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             },

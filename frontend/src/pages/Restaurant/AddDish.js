@@ -117,7 +117,7 @@ function AddDish() {
 
     useEffect(() => {
         const fetchCategory = async () => {
-            axios.get('ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/store/categories/').then((res) => {
+            axios.get('ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/store/categories/').then((res) => {
                 setCategory(res.data)
                 console.log(res.data)
             })
@@ -189,7 +189,7 @@ function AddDish() {
               }
           });
 
-          const response = await axios.post(`ec2-51-20-114-152.eu-north-1.compute.amazonaws.com/api/restaurant/create-dish/${userdata?.restaurant_id}/`, formData, {
+          const response = await axios.post(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/create-dish/${userdata?.restaurant_id}/`, formData, {
               headers: {
                   'Content-Type': 'multipart/form-data',
               },
