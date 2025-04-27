@@ -42,5 +42,6 @@ jobs:
             docker stop bitebox || true
             docker rm bitebox || true
             docker run -d --name bitebox -p 80:8000 ${{ secrets.DOCKERHUB_USERNAME }}/bitebox:latest
+         
           EOF
         
