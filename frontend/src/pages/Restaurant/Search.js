@@ -11,7 +11,7 @@ function Search() {
   const query=param.get('query')
 
   const fetchDishes= async()=>{
-    axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/store/search?query=${query}`).
+    axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/search?query=${query}`).
     then(response => {
       setDishes(response.data);  // Set the fetched dishes
       console.log(response.data);

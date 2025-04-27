@@ -9,7 +9,7 @@
   
 //   useEffect(() => {
 //     // Fetch dishes for the restaurant
-//     axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/store/dishes/`, {
+//     axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/dishes/`, {
 //       params: { restaurant_id: id }
 //     })
 //     .then(response => {
@@ -23,7 +23,7 @@
 //   }, [id]);
 //   useEffect(()=>  {
           
-//           axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/store/dish/${dishes?.slug}`).then((res)=>{
+//           axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/dish/${dishes?.slug}`).then((res)=>{
         
 //           console.log(res.data);
           
@@ -75,7 +75,7 @@ const RestaurantDetail = () => {
 
   useEffect(() => {
     // Step 1: Fetch dishes
-    axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/store/dishes/`, {
+    axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/dishes/`, {
       params: { restaurant_id: id }
     })
     .then(response => {
@@ -91,7 +91,7 @@ const RestaurantDetail = () => {
     // Step 2: When dishes are fetched, get restaurant info using the first dish's slug
     if (dishes.length > 0) {
       const slug = dishes[0].slug;  // Get slug from the first dish
-      axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/store/dish/${slug}`)
+      axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/dish/${slug}`)
         .then(response => {
           console.log("Fetched Restaurant:", response.data);
           setRestaurant(response.data);

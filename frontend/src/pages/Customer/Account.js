@@ -17,7 +17,7 @@ function Account() {
             // }
             if (data?.id) {
                 
-                axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/user/account/${data?.id}/`).then((res)=>{
+                axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/user/account/${data?.id}/`).then((res)=>{
                     console.log(res);
                     setProfile(res.data)
                 })

@@ -115,10 +115,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bitebox',  # The name of your PostgreSQL database
-        'USER': 'bitebox',      # The PostgreSQL username
-        'PASSWORD': 'bitebox123',  # The PostgreSQL password
-        'HOST': 'bitebox.c9mk4iamcldn.eu-north-1.rds.amazonaws.com',   # The host (leave as 'localhost' for local databases)
+        'NAME': 'bitebox2',  # The name of your PostgreSQL database
+        'USER': 'bitebox2',      # The PostgreSQL username
+        'PASSWORD': 'bitebox2',  # The PostgreSQL password
+        'HOST': 'bitebox2.c9mk4iamcldn.eu-north-1.rds.amazonaws.com',   # The host (leave as 'localhost' for local databases)
         'PORT': '5432',        # The PostgreSQL port (5432 is the default)
     }
 }

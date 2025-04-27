@@ -17,7 +17,7 @@ function Notifications() {
     if (data?.restaurant_id) {
       
       try {
-        const response = await axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/notifications/${data?.restaurant_id}/`);
+        const response = await axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/notifications/${data?.restaurant_id}/`);
         setNotifications(response.data);
         console.log(response.data);
         
@@ -30,7 +30,7 @@ function Notifications() {
     if (data?.restaurant_id) {
       
       try {
-        const response = await axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/notifications-summary/${data?.restaurant_id}/`);
+        const response = await axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/notifications-summary/${data?.restaurant_id}/`);
         setStats(response.data[0]);
         console.log(response.data);
         
@@ -49,7 +49,7 @@ function Notifications() {
     
       
       try {
-        const response = await axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/notifications-mark-as-seen/${data?.restaurant_id}/${notiId}/`);
+        const response = await axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/notifications-mark-as-seen/${data?.restaurant_id}/${notiId}/`);
         console.log(response.data);
         await fetchNoti()
         await fetchNotiSummary()

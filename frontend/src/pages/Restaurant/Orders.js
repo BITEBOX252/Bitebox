@@ -17,7 +17,7 @@ function Orders() {
         const fetchData = async () => {
             if (data?.restaurant_id) {
                 try {
-                    const response = await axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/orders/${data.restaurant_id}/`);
+                    const response = await axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/orders/${data.restaurant_id}/`);
                     setOrders(response.data);
                     console.log("Orders updated:", response.data);
                 } catch (error) {
@@ -40,7 +40,7 @@ function Orders() {
     //       if (data?.restaurant_id) {
             
     //         try {
-    //             const response = await axios.get(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/orders/${data?.restaurant_id}/`)
+    //             const response = await axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/orders/${data?.restaurant_id}/`)
     //             setOrders(response.data);
     //             console.log(response.data);
                 
@@ -86,7 +86,7 @@ function Orders() {
     onChange={async (e) => {
       const newStatus = e.target.value;
       try {
-        await axios.patch(`ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/restaurant/orders/${data.restaurant_id}/${o.oid}/`, {
+        await axios.patch(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/orders/${data.restaurant_id}/${o.oid}/`, {
           order_status: newStatus
         });
         setOrders((prevOrders) =>

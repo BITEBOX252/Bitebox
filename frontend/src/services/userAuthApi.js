@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 // Define a service using a base URL and expected endpoints
 export const userAuthApi = createApi({
   reducerPath: 'userAuthApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'ec2-56-228-5-252.eu-north-1.compute.amazonaws.com/api/user/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/user/' }),
   endpoints: (builder) => ({
     registerUser: builder.mutation({
       query: (user) => {
