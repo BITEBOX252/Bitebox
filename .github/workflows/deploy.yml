@@ -35,6 +35,7 @@ jobs:
           ssh-keyscan -H ${{ secrets.AWS_EC2_IP }} >> ~/.ssh/known_hosts
 
 
+
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${{ secrets.AWS_EC2_IP }} << 'EOF'
