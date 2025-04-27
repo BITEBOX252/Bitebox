@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.AWS_EC2_KEY }}" > ~/.ssh/id_rsa
-          chmod 400 ~/.ssh/id_rsa
+          chmod 400 "bitebox_restaurant.pem"
           ssh-keyscan -H ${{ secrets.AWS_EC2_IP }} >> ~/.ssh/known_hosts
 
 
