@@ -1,5 +1,5 @@
 #Stage 1
-FROM node:16 as build:stage
+FROM node:16 as build_stage
 WORKDIR /code
 COPY ./frontend/ /code/frontend 
 
