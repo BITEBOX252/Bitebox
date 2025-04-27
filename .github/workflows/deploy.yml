@@ -24,8 +24,8 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/Bitebox:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/Bitebox:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/bitebox:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/bitebox:latest
 
       - name: Setup SSH
         run: |
@@ -39,10 +39,10 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${{ secrets.AWS_EC2_IP }} << 'EOF'
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker pull ${{ secrets.DOCKER_USERNAME }}/Bitebox:latest
-            docker stop Bitebox || true
-            docker rm Bitebox || true
-            docker run -d --name Bitebox -p 80:8000 ${{ secrets.DOCKER_USERNAME }}/Bitebox:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/bitebox:latest
+            docker stop bitebox || true
+            docker rm bitebox || true
+            docker run -d --name bitebox -p 80:8000 ${{ secrets.DOCKER_USERNAME }}/bitebox:latest
          
           EOF
         
