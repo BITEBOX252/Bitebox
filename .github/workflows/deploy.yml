@@ -40,12 +40,12 @@ jobs:
           -----END OPENSSH PRIVATE KEY-----
           EOF
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 16.16.90.50 >> ~/.ssh/known_hosts
+          ssh-keyscan -H 13.48.47.13 >> ~/.ssh/known_hosts
 
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.AWS_ECP_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${{ secrets.AWS_ECP_IP }} << 'EOF'
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker pull ${{ secrets.DOCKER_USERNAME }}/bitebox:latest
             docker stop bitebox || true
