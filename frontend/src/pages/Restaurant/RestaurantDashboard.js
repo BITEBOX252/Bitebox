@@ -16,7 +16,7 @@ function RestaurantDashboard() {
   useEffect(() => {
     console.log(data)
     if (data?.restaurant_id) {  // ✅ Ensure restaurant_id exists before making API call
-      axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/stats/${data.restaurant_id}/`)
+      axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/stats/${data.restaurant_id}/`)
         .then((res) => {
           console.log(res.data);
           setStats(res.data[0]);
@@ -24,7 +24,7 @@ function RestaurantDashboard() {
         .catch((err) => {
           console.error("Error fetching stats:", err);
         });
-        axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/dishes/${data.restaurant_id}/`).
+        axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/dishes/${data.restaurant_id}/`).
         then((res) => {
           setDishes(res.data);
           console.log(res.data);
@@ -37,7 +37,7 @@ function RestaurantDashboard() {
   
   // useEffect(()=>{
   //   console.log(data)
-  //   axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/stats/${data?.restaurant_id}/`).then((res)=>{
+  //   axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/stats/${data?.restaurant_id}/`).then((res)=>{
   //     console.log(res)
   //     setStats(res.data)
   //   })

@@ -12,7 +12,7 @@ function Riders() {
 
     const [riders,setRiders]=useState([]);
     useEffect(() => {
-      const res=axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/${data?.restaurant_id}/delivery-boys/`).then((res) => {
+      const res=axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/${data?.restaurant_id}/delivery-boys/`).then((res) => {
         setRiders(res.data)
         console.log(res.data);
         
@@ -30,8 +30,8 @@ function Riders() {
           // Check if the user confirmed the deletion
           if (result.isConfirmed) {
               // Make an asynchronous request to delete the product using apiInstance
-              await axios.delete(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/${data?.restaurant_id}/delivery-boys/${riderid}/`)
-              await axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/${data?.restaurant_id}/delivery-boys/`).
+              await axios.delete(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/${data?.restaurant_id}/delivery-boys/${riderid}/`)
+              await axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/${data?.restaurant_id}/delivery-boys/`).
                   then((res) => {
                     setRiders(res.data);
                     console.log(res.data);
@@ -104,7 +104,7 @@ function Riders() {
                                     onChange={async (e) => {
                                       const newStatus = e.target.value;
                                       try {
-                                        await axios.patch(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/${data?.restaurant_id}/delivery-boys/${r.id}/`, {
+                                        await axios.patch(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/${data?.restaurant_id}/delivery-boys/${r.id}/`, {
                                           status: newStatus
                                         });
                                         setRiders((prevRiders) =>

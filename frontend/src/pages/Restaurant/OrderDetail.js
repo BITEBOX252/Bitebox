@@ -18,7 +18,7 @@ function OrderDetail() {
       useEffect(() => {
         if (data?.restaurant_id) {
             
-            axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/orders/${data?.restaurant_id}/${param?.order_id}/`).then((res) => {
+            axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/orders/${data?.restaurant_id}/${param?.order_id}/`).then((res) => {
               setOrder(res.data);
               console.log(res.data);
               setAddress(res.data)

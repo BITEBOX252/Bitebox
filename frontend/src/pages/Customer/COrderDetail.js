@@ -18,7 +18,7 @@ const [order, setOrder] = useState([])
   useEffect(() => {
     if (data?.id) {
         
-        axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/customer/order/detail/${data?.id}/${param?.order_oid}`).then((res) => {
+        axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/customer/order/detail/${data?.id}/${param?.order_oid}`).then((res) => {
           setOrder(res.data);
           console.log(res.data);
           

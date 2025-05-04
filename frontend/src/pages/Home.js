@@ -17,7 +17,7 @@ const Home = () => {
   const [updateUserLocation] = useUpdateUserLocationMutation();  // Mutation hook
   const [categories, setCategories] = useState([]);
   useEffect(() => {
-    axios.get('http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/categories/')
+    axios.get('http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/store/categories/')
       .then(response => {
         setCategories(response.data);
         console.log(response.data);
@@ -42,7 +42,7 @@ const Home = () => {
         await updateUserLocation({ latitude, longitude, access_token });
 
         // Fetch nearby restaurants from the API
-        axios.get('http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/nearby-restaurants/', {
+        axios.get('http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/nearby-restaurants/', {
           headers: {
             'Authorization': `Bearer ${access_token}`
           },
@@ -82,7 +82,7 @@ const Home = () => {
            >
             <Link to={`/detail/${r.id}`}>
              <img
-               src={`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com${r.image}`}
+               src={`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com${r.image}`}
                className="w-100"
              />
              </Link>

@@ -18,7 +18,7 @@ function Reviews() {
     
       const fetchData = async () => {
         try {
-          const response = await axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/restaurant-reviews/${data?.restaurant_id}/`);
+          const response = await axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/restaurant-reviews/${data?.restaurant_id}/`);
           setReviews(response.data);
           console.log(response.data);
           
@@ -45,7 +45,7 @@ function Reviews() {
     
         formdata.append('reply', updateReviews.reply)
     
-        await axios.patch(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/reviews/${data?.restaurant_id}/${reviewId}/`, formdata).then((res) => {
+        await axios.patch(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/reviews/${data?.restaurant_id}/${reviewId}/`, formdata).then((res) => {
           console.log(res.data);
         })
     

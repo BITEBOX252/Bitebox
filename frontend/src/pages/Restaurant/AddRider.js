@@ -129,7 +129,7 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/${data?.restaurant_id}/delivery-boys/`, formData);
+      const res = await axios.post(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/${data?.restaurant_id}/delivery-boys/`, formData);
       console.log('Rider added successfully:', res.data);
       alert('Rider added successfully');
       setFormData({ name: '', email: '', phone_number: '',restaurant: '' }); // reset form

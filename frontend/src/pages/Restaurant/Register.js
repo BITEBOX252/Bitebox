@@ -55,7 +55,7 @@
 //             data.append('longitude', longitude); // Add longitude
 
 //             try {
-//                 const response = await axios.post('http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/register/', data, {
+//                 const response = await axios.post('http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/register/', data, {
 //                     headers: {
 //                         'Content-Type': 'multipart/form-data',
 //                         'Authorization': `Bearer ${access_token}`,
@@ -238,7 +238,7 @@ const Register = () => {
             data.append('longitude', longitude);
 
             try {
-                const response = await axios.post('http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/register/', data, {
+                const response = await axios.post('http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/register/', data, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${access_token}`,

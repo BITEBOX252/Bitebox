@@ -12,7 +12,7 @@ const ActivateAccount = () => {
   useEffect(() => {
     const activateUser = async () => {
       try {
-        const res = await axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/user/activate/${uid}/${token}/`);
+        const res = await axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/user/activate/${uid}/${token}/`);
         setStatusMsg(res.data.msg);
       } catch (error) {
         setIsError(true);

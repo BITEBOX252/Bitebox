@@ -61,7 +61,7 @@ const DishDetail = () => {
     })
     useEffect(()=>  {
         
-        axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/dish/${params.slug}`).then((res)=>{
+        axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/store/dish/${params.slug}`).then((res)=>{
       
         console.log(res.data);
         
@@ -85,7 +85,7 @@ const DishDetail = () => {
         setPortionSizeValue(portionSizeName.value)
         try {
             
-            const response = await axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/dish/${params.slug}`, {
+            const response = await axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/store/dish/${params.slug}`, {
                 params: { portion_size: portionSizeName.value }  // Pass the selected size as a query parameter
             }).then((res)=>{
                 console.log(res)
@@ -122,7 +122,7 @@ const DishDetail = () => {
 
     const fetchReviewData = async () => {
         try {
-            const res = await axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/reviews/${dishes?.id}`);
+            const res = await axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/reviews/${dishes?.id}`);
             setReviews(res.data);
             console.log(res.data);
         } catch (error) {
@@ -154,13 +154,13 @@ const DishDetail = () => {
         formdata.append("spiceLevel",spiceLevelValue)
         formdata.append("cart_id",CartId)
 
-        const response= await axios.post(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/cart/`,formdata)
+        const response= await axios.post(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/store/cart/`,formdata)
         console.log(response);
         Toast.fire({
             icon: 'success',
             title: 'Added To Cart'
         });
-        const url = data ? `http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/cart-list/${CartId}/${data.id}/` : `http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/cart-list/${CartId}/`;
+        const url = data ? `http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/store/cart-list/${CartId}/${data.id}/` : `http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/store/cart-list/${CartId}/`;
         const res= await axios.get(url)
         .then((res) => {
             console.log("response ======",res.data);
@@ -201,7 +201,7 @@ const handleReviewSubmit=(e)=>{
     formData.append('rating',createReviews.rating)
     formData.append('review',createReviews.review)
 
-    axios.post(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/restaurant/reviews/${dishes?.id}/`,formData).then((res)=>{
+    axios.post(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/restaurant/reviews/${dishes?.id}/`,formData).then((res)=>{
         console.log(res.data);
         fetchReviewData()
         Toast.fire({

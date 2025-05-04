@@ -61,7 +61,7 @@ const [cartCount,setCartCount]=useState()
 useEffect(()=>{
   console.log(data);
   
-  const url = data ? `http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/cart-list/${CartId}/${data.id}/` : `http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/store/cart-list/${CartId}/`;
+  const url = data ? `http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/store/cart-list/${CartId}/${data.id}/` : `http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/store/cart-list/${CartId}/`;
     axios.get(url)
       .then((res) => {
         console.log(res);

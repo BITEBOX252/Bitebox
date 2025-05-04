@@ -15,7 +15,7 @@ let { access_token } = getToken();
         if(data?.id){
 
         }
-        axios.get(`http://ec2-13-49-75-56.eu-north-1.compute.amazonaws.com/api/customer/notifications/${data?.id}/`).then((res) => {
+        axios.get(`http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com/api/customer/notifications/${data?.id}/`).then((res) => {
             setNotifications(res.data);
             
         })

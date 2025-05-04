@@ -19,14 +19,14 @@ WORKDIR /code
 
 COPY ./backend/ /code/backend/
 
-RUN pip install -r /code/backend/requirements.txt
+RUN pip install -r ./backend/requirements.txt
 
 COPY --from=build-stage /code/frontend/build /code/backend/static/
 COPY --from=build-stage /code/frontend/build/static /code/backend/static/
-COPY --from=build-stage /code/frontend/build/index.html /code/backend/templates/index.html
+COPY --from=build-stage /code/frontend/build/index.html /code/backend/backend/templates/index.html
 
-RUN python /code/backend/manage.py migrate
-RUN python /code/backend/manage.py collectstatic --no-input
+RUN python ./backend/manage.py migrate
+RUN python ./backend/manage.py collectstatic --no-input
 
 EXPOSE 80
 
