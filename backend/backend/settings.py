@@ -232,7 +232,9 @@ SIMPLE_JWT = {
 # settings.py
 PASSWORD_RESET_TIMEOUT = 60 * 30  # 30 minutes
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+#     "http://ec2-13-48-47-13.eu-north-1.compute.amazonaws.com",
+# ]
+CORS_ALLOW_ALL_ORIGINS = True 
