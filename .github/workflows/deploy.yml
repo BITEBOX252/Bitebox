@@ -30,9 +30,17 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh/
-          echo "${{ secrets.AWS_EC2_KEY }}" > ~/.ssh/id_rsa
+          cat <<'EOF' > ~/.ssh/id_rsa
+          -----BEGIN OPENSSH PRIVATE KEY-----
+          b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtz
+          c2gtZWQyNTUxOQAAACDtvhOKx4KkwLZnc57ddU4dUDUgiblrlnxzAtfvFY3q1wAA
+          AIih6OSdoejknQAAAAtzc2gtZWQyNTUxOQAAACDtvhOKx4KkwLZnc57ddU4dUDUg
+          iblrlnxzAtfvFY3q1wAAAEAwUQIBATAFBgMrZXAEIgQglD6+0Zpfc0NVmhp/2uTY
+          fu2+E4rHgqTAtmdznt11Th1QNSCJuWuWfHMC1+8VjerXAAAAAAECAwQF
+          -----END OPENSSH PRIVATE KEY-----
+          EOF
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.AWS_EC2_IP }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H 16.16.90.50 >> ~/.ssh/known_hosts
           ssh-add ~/.ssh/id_rsa
 
 
